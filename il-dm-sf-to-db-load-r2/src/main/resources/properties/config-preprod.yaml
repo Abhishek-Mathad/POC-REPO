@@ -1,0 +1,27 @@
+sf:
+  username: "integrationuser.data@imaginelearning.com.uat"
+  url: "https://test.salesforce.com/services/Soap/u/55.0"
+  token: "kJH9IWZjXkhQPInv6kOo4R3og"
+  password: "UAT@IL2023"
+  batchSize: "5000"
+  updateBatchSize: "2000"
+
+sf_prod:
+  username: "integrationuser.data@imaginelearning.com"  
+  url: "https://login.salesforce.com/services/Soap/u/55.0"
+  token: "OIAlXzVQGbFlzcW1djhyd4en"
+  password: "ImagineProd@2023"
+  
+db:
+  host: "aop-crm-sqlsrv.database.windows.net"
+  port: "1433"
+  user: "vnithyashree"
+  password: "C91Cdy4hnG8tDPCi"
+  databaseName: "score-staging"
+  updateBatchSize: "2000"
+  schema: "uat_stg"
+  atmQuery: "select distinct concat(cast(cast(customermain#internalid as int) as varchar(255)),'-',cast(salesrep#id as int)) as AccountTeamMember_Legacy_ExternalId__c from uat_src.R2Orders"
+  atmSFQuery: "Select Id,AccountId,UserId,User.User_Legacy_ExternalId__c,Account.Account_Legacy_ExternalId__c,TeamMemberRole,Title,AccountTeamMember_Legacy_ExternalId__c,IsDeleted,CurrencyIsoCode,User.Name,PhotoUrl,OpportunityAccessLevel,User.Profile.Name from AccountTeamMember where AccountId in (Select AccountId from Opportunity where CreatedDate < 2023-12-09T14:16:33.608+05:30)"
+  insertBatchSize: "10000"
+#  old sf token: "bJbA7gAQr4JiaLiJVijfQ1VF"
+

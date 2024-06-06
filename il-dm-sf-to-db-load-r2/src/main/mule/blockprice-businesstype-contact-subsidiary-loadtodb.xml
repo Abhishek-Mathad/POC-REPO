@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="BlockPrice-loadtodb" doc:id="0f2074a2-0ea6-4b82-bc32-15ff2edeecf0" >
+		<scheduler doc:name="Scheduler" doc:id="b0b24ea9-ac4f-4501-a72b-a1755f1bf245" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="993fcdf1-ced0-468d-866a-c80010eb0999" message="Started BlockPrice Load flow"/>
+		<flow-ref doc:name="blockprice-loadtodb-subflow" doc:id="1170dc4d-98e9-472e-aa2e-e81bde8311bd" name="blockprice-loadtodb-subflow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="9ce7ca91-ad2f-4191-9212-2253ae873834" message="Completed BlockPrice Load flow"/>
+	</flow>
+	<flow name="BusinessTypeMapping-loadtodb" doc:id="3cdd10a0-7335-44c3-96c7-536bf7503201" >
+		<scheduler doc:name="Scheduler" doc:id="09baa0ec-6c2b-4433-94d4-3c21e8559637" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="a3e81776-2529-43ed-93a5-521a0da90df4" message="Started BusinessTypeMapping Load flow"/>
+		<flow-ref doc:name="businesstype-loadtodb-subflow" doc:id="e03d7ffa-fbc2-4c56-a82e-2f7f8cd08bae" name="businesstype-loadtodb-subflow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="b6c9c014-7d28-45be-8bb9-89d49d4f867f" message="Completed BusinessTypeMapping Load flow"/>
+	</flow>
+	<flow name="Contact-loadtodb" doc:id="fdd7a02e-ae93-4575-b563-a2889518d3ff" >
+		<scheduler doc:name="Scheduler" doc:id="00857b99-94bf-4d18-b8de-9c68a849944c" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="e6d8c8f6-f72d-49b4-b698-808bc65555de" message="Started Contact Load flow"/>
+		<flow-ref doc:name="contact-loadtodb-subflow" doc:id="bde6cb05-a761-4fa5-b565-207e4ef8a4d3" name="contact-loadtodb-subflow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="b2028339-6d8f-4195-82d0-e7eae5f10120" message="Completed Contact Load flow"/>
+	</flow>
+	<flow name="Subsidiary-loadtodb" doc:id="c9a840d3-b254-4cf8-b729-727e8749a82b" >
+		<scheduler doc:name="Scheduler" doc:id="bbb37896-1312-4e70-bdbe-5003611f7dd8" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="f9dc8f01-e22e-4ed5-8c1b-0173fd0d4867" message="Started Subsidiary Load flow"/>
+		<flow-ref doc:name="subsidiary-loadtodb-subflow" doc:id="e7d80a0d-9d7c-4239-b37b-c47dfbf30d36" name="subsidiary-loadtodb-subflow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="471c2167-69fa-4756-930e-efd7a423d9cc" message="Completed Subsidiary Load flow"/>
+	</flow>
+	<sub-flow name="blockprice-loadtodb-subflow" doc:id="424131e2-dc82-482d-8b8a-cfcc0a2ab0cd" >
+		<ee:transform doc:name="Block Price" doc:id="c95d0769-0fc0-4440-9243-0e73ab5836ac" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, CurrencyIsoCode, SBQQ__LowerBound__c,  SBQQ__PriceBook2__c, SBQQ__Price__c, SBQQ__Product__c, SBQQ__UpperBound__c from SBQQ__BlockPrice__c"]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="tableName" ><![CDATA["[" ++ p('db.schema') ++ "].[SF_Block_Price]"]]></ee:set-variable>
+				<ee:set-variable variableName="values" ><![CDATA["(:Id,:CurrencyIsoCode,:SBQQ__LowerBound__c,:SBQQ__PriceBook2__c,:SBQQ__Price__c,:SBQQ__Product__c,:SBQQ__UpperBound__c)"]]></ee:set-variable>
+				<ee:set-variable variableName="columns" ><![CDATA[["Id","CurrencyIsoCode","SBQQ__LowerBound__c","SBQQ__PriceBook2__c","SBQQ__Price__c","SBQQ__Product__c","SBQQ__UpperBound__c"]]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="c394e2d8-9b10-4152-b665-249c3e06c939" name="query-in-salesforce-subFlow"/>
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="25774801-47b4-4b8d-9358-626dbf7f67e4" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="fa8168fc-8bd6-46d9-b8f5-e6cbaa997103" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id":record.Id,
+"CurrencyIsoCode":record.CurrencyIsoCode,
+"SBQQ__LowerBound__c":record.SBQQ__LowerBound__c,
+"SBQQ__PriceBook2__c":record.SBQQ__PriceBook2__c,
+"SBQQ__Price__c":record.SBQQ__Price__c,
+"SBQQ__Product__c":record.SBQQ__Product__c,
+"SBQQ__UpperBound__c":record.SBQQ__UpperBound__c
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="48cdbdee-3eb0-419a-b765-ab8931d671a4" name="insert-to-database-subFlow"/>
+	</sub-flow>
+	<sub-flow name="businesstype-loadtodb-subflow" doc:id="bedf0c07-1419-4df7-a91d-c80caaaf7a5d" >
+		<ee:transform doc:name="Business Type Price" doc:id="9851c916-43ce-4d3b-97cf-172531f970b3" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, Name, Business_Type_ConcatKey__c, Business_Type__c from Business_Type_Mapping__c"]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="tableName" ><![CDATA["[" ++ p('db.schema') ++ "].[SF_Business_Type_Mapping__c]"]]></ee:set-variable>
+				<ee:set-variable variableName="values" ><![CDATA["(:Id,:Name,:Business_Type_ConcatKey__c,:Business_Type__c)"]]></ee:set-variable>
+				<ee:set-variable variableName="columns" ><![CDATA[["Id","Name","Business_Type_ConcatKey__c","Business_Type__c"]]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="adfe1f04-2dde-4bca-9c70-03ecfc5615a7" name="query-in-salesforce-subFlow"/>
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="73a35f37-40be-43ba-9b7d-6abbbd15cd8b" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="8b17898c-06ea-4615-b55f-49b4dc8fc3f4" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id":record.Id,
+"Name":record.Name,
+"Business_Type_ConcatKey__c":record.Business_Type_ConcatKey__c,
+"Business_Type__c":record.Business_Type__c
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="cf7148ca-6bbc-47ef-b6a4-a715e7420930" name="insert-to-database-subFlow"/>
+	</sub-flow>
+	<sub-flow name="contact-loadtodb-subflow" doc:id="714b8a31-2419-4a46-9159-24db60cfb783" >
+		<ee:transform doc:name="Contact" doc:id="f16b407e-6f6c-4f49-9502-04d900277cd3" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, Contact_Legacy_ExternalId__c, Inactive__c, AccountId, FirstName, LastName, Name, Email, CreatedDate from Contact"]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="tableName" ><![CDATA["[" ++ p('db.schema') ++ "].[SF_Contact]"]]></ee:set-variable>
+				<ee:set-variable variableName="values" ><![CDATA["(:Id,:Contact_Legacy_ExternalId__c,:Inactive__c,:AccountId,:FirstName,:LastName,:Name,:Email,:CreatedDate)"]]></ee:set-variable>
+				<ee:set-variable variableName="columns" ><![CDATA[["Id","Contact_Legacy_ExternalId__c","Inactive__c","AccountId","FirstName","LastName","Name","Email","CreatedDate"]]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="66928a12-3710-41ad-8e9f-6ec2d478fb75" name="query-in-salesforce-subFlow"/>
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="576c0a6e-fc85-4232-88f9-4cc7ef6aaefc" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="aba2a07d-93eb-4635-b07b-10d909a0c1b9" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id":record.Id,
+"Contact_Legacy_ExternalId__c":record.Contact_Legacy_ExternalId__c,
+"Inactive__c":record.Inactive__c,
+"AccountId":record.AccountId,
+"FirstName":record.FirstName,
+"LastName":record.LastName,
+"Name":record.Name,
+"Email":record.Email,
+"CreatedDate":record.CreatedDate
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="336e98c3-518e-40e4-bacb-5acafedbc70d" name="insert-to-database-subFlow"/>
+	</sub-flow>
+	<sub-flow name="subsidiary-loadtodb-subflow" doc:id="379845b5-5201-4b6b-be79-330c1da634d1" >
+		<ee:transform doc:name="Subsidiary" doc:id="a19031c0-9260-4413-8a1d-8c2661d77020" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, Name, OwnerId, IsDeleted, CurrencyIsoCode from Subsidiary__c"]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="tableName" ><![CDATA["[" ++ p('db.schema') ++ "].[SF_Subsidiary]"]]></ee:set-variable>
+				<ee:set-variable variableName="values" ><![CDATA["(:Id,:Name,:OwnerId,:IsDeleted,:CurrencyIsoCode)"]]></ee:set-variable>
+				<ee:set-variable variableName="columns" ><![CDATA[["Id","Name","OwnerId","IsDeleted","CurrencyIsoCode"]]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="a3c17f93-9dec-4c16-9265-d220e740b551" name="query-in-salesforce-subFlow"/>
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="e0a1d468-a015-439f-b096-9e06f5417210" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="bab5e355-1a0c-4452-81da-3b2982257980" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id":record.Id,
+"Name":record.Name,
+"OwnerId":record.OwnerId,
+"IsDeleted":record.IsDeleted,
+"CurrencyIsoCode":record.CurrencyIsoCode
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="bc5c9070-bd61-4563-a8ae-68410186b228" name="insert-to-database-subFlow"/>
+	</sub-flow>
+</mule>

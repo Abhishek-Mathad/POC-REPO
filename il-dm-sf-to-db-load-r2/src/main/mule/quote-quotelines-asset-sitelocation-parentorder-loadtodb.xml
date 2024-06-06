@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="Quotes-loadtodb" doc:id="99a62d29-937a-4dee-823f-55d7ae099908" >
+		<scheduler doc:name="Scheduler" doc:id="d59a897e-1d16-4d6c-b950-780ab06495d8" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100"/>
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="6f4f7403-a3a4-4931-a384-7bec16bcb1ba" message="Started Quotes Load flow"/>
+		<flow-ref doc:name="quotes-loadtodb-subflow" doc:id="3c3d806e-ec67-408f-8323-54079b69cf22" name="quotes-loadtodb-subflow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="732ff7a1-f70b-46d3-8208-97dd4a1f6b7a" message="Completed Quotes Load flow"/>
+	</flow>
+	<flow name="QuoteLines-loadtodb" doc:id="83b328d9-3755-49b1-b4fc-4ba5eb53a22b" >
+		<scheduler doc:name="Scheduler" doc:id="a2d53905-31ae-44d9-bece-f7eafcd8d05c" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="d253d5e9-0060-4684-bb38-7e34d90cf91f" message="Started QuoteLine Load flow" />
+		<flow-ref doc:name="quoteLine-loadtodb-subflow" doc:id="2521dff3-23d7-4f01-855e-bc6cba20098b" name="quoteLine-loadtodb-subflow" />
+		<logger level="INFO" doc:name="Logger" doc:id="5fb1ef7b-adcc-4e36-8118-160e0e8c1b42" message="Completed QuoteLine Load flow" />
+	</flow>
+	<flow name="SiteLocation-loadtodb" doc:id="5116f402-2e51-420b-b437-9f7208d7746a" >
+		<scheduler doc:name="Scheduler" doc:id="7e44dc74-c347-4354-9c60-ddaa74bcac3a" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="5b2459a7-cf0a-4f64-80c1-0101db9c88ff" message="Started SiteLocation Load flow" />
+		<flow-ref doc:name="siteLocation-loadtodb-subflow" doc:id="3a58e9e8-1b00-4eea-a697-87d446270dad" name="siteLocation-loadtodb-subflow" />
+		<logger level="INFO" doc:name="Logger" doc:id="d23f847d-2c82-48ff-9cec-206a0094570b" message="Completed SiteLocation Load flow" />
+	</flow>
+	<flow name="Assets-loadtodb" doc:id="a434498e-45c4-4eea-98e0-6fd8cb015188" >
+		<scheduler doc:name="Scheduler" doc:id="88e06557-dd0f-41aa-8181-8f5a0a2d7d5f" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="6e0f5a76-44cd-47ff-8a90-358741974545" message="Started Assets Load flow" />
+		<flow-ref doc:name="Assets-loadtodb-subflow" doc:id="a53b0090-297f-43ed-a469-a23c2c818eba" name="Assets-loadtodb-subflow" />
+		<logger level="INFO" doc:name="Logger1" doc:id="a5c2a0a6-7101-4ac0-9f54-5b699b2f90c8" message="Completed Assets Load flow" />
+	</flow>
+	<flow name="ParentOrder-loadtodb" doc:id="5d722157-4844-422d-9a17-a83ff520ee38" >
+		<scheduler doc:name="Scheduler" doc:id="817c8684-f3e0-4329-9c70-976cedd3c353" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="399976cd-b9e9-4601-8d99-92af0e466aea" message="Started ParentOrder Load flow"/>
+		<flow-ref doc:name="parentorder-loadtodb-subflow" doc:id="1e7784ce-d039-4f66-beca-48de4ab737e6" name="parentorder-loadtodb-subflow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="9d83b7f9-ff97-452c-ab82-64c5a675f8b9" message="Completed ParentOrder Load flow"/>
+	</flow>
+	<flow name="QuoteLinesRecon-loadtodb" doc:id="5ab482da-b51b-4f14-b403-31bc39304fb4" >
+		<scheduler doc:name="Scheduler" doc:id="1ba4121a-bbf5-427b-9a0c-e5fb3d4da26f" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="04bff045-5eb7-4b02-a355-6f408d891705" message="Started QuoteLine reconciliation Load flow"/>
+		<flow-ref doc:name="quoteLine-Recon-loadtodb-subflow" doc:id="24061ab5-9638-4c5d-947e-d5482327c110" name="quoteLine-Recon-loadtodb-subflow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="36ec9ab2-0468-47d8-8143-5fd666b83268" message="Completed QuoteLine reconciliation Load flow"/>
+	</flow>
+	<sub-flow name="quotes-loadtodb-subflow" doc:id="243e6caa-b3db-4a42-a241-bcbf063d9c70" >
+		<ee:transform doc:name="Quotes" doc:id="6b6a50b8-d955-4ec7-8b08-773367a6a284" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, OwnerId, Name, CreatedDate, CurrencyIsoCode, RecordTypeId, SBQQ__Account__c, SBQQ__BillingCity__c, SBQQ__BillingCountry__c, SBQQ__BillingFrequency__c, SBQQ__BillingName__c, SBQQ__BillingPostalCode__c, SBQQ__BillingState__c, SBQQ__BillingStreet__c, SBQQ__ConsumptionRateOverride__c, SBQQ__ContractingMethod__c, SBQQ__CustomerDiscount__c, SBQQ__DefaultTemplate__c, SBQQ__DeliveryMethod__c, SBQQ__DistributorDiscount__c, SBQQ__Distributor__c, SBQQ__DocumentStatus__c, SBQQ__EmailTemplateId__c, SBQQ__EndDate__c, SBQQ__FirstSegmentTermEndDate__c, SBQQ__GenerateContractedPrice__c, SBQQ__Introduction__c, SBQQ__Key__c, SBQQ__LastCalculatedOn__c, SBQQ__LastSavedOn__c, SBQQ__LineItemsGrouped__c, SBQQ__LineItemsPrinted__c, SBQQ__MarkupRate__c, SBQQ__MasterContract__c, SBQQ__MasterEvergreenContract__c, SBQQ__Notes__c, SBQQ__Opportunity2__c, SBQQ__OrderByQuoteLineGroup__c, SBQQ__OrderBy__c, SBQQ__OrderGroupID__c, SBQQ__Ordered__c, SBQQ__OriginalQuote__c, SBQQ__PaperSize__c, SBQQ__PartnerDiscount__c, SBQQ__Partner__c, SBQQ__PaymentTerms__c, SBQQ__PriceBook__c, SBQQ__PricebookId__c, SBQQ__PrimaryContact__c, SBQQ__Primary__c, SBQQ__ProrationDayOfMonth__c, SBQQ__QuoteLanguage__c, SBQQ__QuoteProcessId__c, SBQQ__QuoteTemplateId__c, SBQQ__RenewalTerm__c, SBQQ__RenewalUpliftRate__c, SBQQ__SalesRep__c, SBQQ__ShippingCity__c, SBQQ__ShippingCountry__c, SBQQ__ShippingName__c, SBQQ__ShippingPostalCode__c, SBQQ__ShippingState__c, SBQQ__ShippingStreet__c, SBQQ__Source__c, SBQQ__StartDate__c, SBQQ__Status__c, SBQQ__SubscriptionTerm__c, SBQQ__TargetCustomerAmount__c, SBQQ__Type__c, SBQQ__Unopened__c, SBQQ__WatermarkShown__c, SBQQ__LineItemCount__c, SBQQ__AdditionalDiscountAmount__c, SBQQ__AverageCustomerDiscount__c, SBQQ__AveragePartnerDiscount__c, SBQQ__DaysQuoteOpen__c, SBQQ__ExpirationDate__c, SBQQ__TotalCustomerDiscountAmount__c, SBQQ__Uncalculated__c, SBQQ__CustomerAmount__c, SBQQ__ListAmount__c, SBQQ__NetAmount__c, SBQQ__RegularAmount__c, dfscpq__CollectPayment__c, dfscpq__SavePaymentMethod__c, AVA_SFCPQ__AutomaticValidateAddress__c, AVA_SFCPQ__AvaTaxMessage__c, AVA_SFCPQ__Entity_Use_Code__c, AVA_SFCPQ__Invoice_Message__c, AVA_SFCPQ__Is_Seller_Importer_Of_Record__c, AVA_SFCPQ__Quote_AutomateTaxCalculation__c, AVA_SFCPQ__SalesTaxAmount__c, AVA_SFCPQ__Tax_Calculation_Status__c, AR_Or_Order_Management_User__c, Account_Number__c, Additional_Discount__c, Additional_Payment_Terms__c, ApprovalStatus__c, Approval_Comment__c, Approval_Date__c, BillToAddress__c, Bill_To_Account__c, Bill_To_Address__c, Bill_To_City__c, Bill_To_Contact__c, Billing_Frequency_Details__c, Bundle_Line_Item_Count__c, Bundle_Pricing__c, Bundling_Vs_Itemized_Pricing__c, Custom_Payment_Schedule__c, Customer_Message__c, Digital_License_Product_Count__c, Discount_Price__c, Early_Access_Justification__c, Early_Access_Needed__c, Early_Onboarding_Access_Required_By__c, Exclude_Terms_Conditions__c, Fields_needed_on_Quote_Template__c, Generated_Date__c, IL_Onboarding_Record__c, Integration_Error_Message__c, Integration_Sync_Status__c, Invoice_No__c, Is_Accepting_from_Flow__c, Is_Escalation_Sent__c, Is_Special_Terms_Available__c, Is_Subsidy_IL_LLC__c, Is_Subsidy_Twig__c, Language__c, Last_Viewed_Date__c, Latest_Consumable_Date__c, LineSortField__c, Manager_of_Manager_of_Sales_Rep__c, Manager_of_Sales_Rep__c, Memo__c, Net_Total_USD__c, Onboarding_required__c, Order__c, PD_Net_Total__c, PD_Products_Count__c, PD_Total_Quantity__c, PO_Date__c, PO_Status__c, Pack_Out_Code__c, Payment_Schedule__c, Po_Number__c, Product_Codes__c, Quote_Accepted_Date__c, Quote_Header_Message__c, Render_Template_Content__c, SO_Number__c, Ship_to_Address__c, Shipping_Instructions__c, Show_Components__c, Show_Signature__c, Special_Terms__c, SubmittedDate__c, SubmittedUser__c, Subsidiary_Avatax__c, Subsidiary__c, Title__c, Total_Amount__c, Total_Customer_Discount__c, Transaction_Type__c, Xanedu_Custom_1__c, Xanedu_Custom_2__c, Xanedu_Custom_3__c, Xanedu_Custom_4__c, Xanedu_Custom_5__c, Total_ACV__c, Total_ARR__c, Billing_Account_Private__c, Document_Link__c, Is_Account_In_Good_Standing_Approval__c, Is_Employee_Sample_Quote__c, Location__c, PD_Specialist__c, Payment_term_Approval_needed__c, Rush_Order__c, Shipping_Option__c, Template_Logo_URL__c, Remaining_Quantity_for_License_Product__c, Total_Remaining_Quantity__c, Duplicate_Product__c, Subsidiary1__c, Is_Tax_Amount_Calculated__c, Is_Tax_calculated__c, Tax_Calculation_Status__c, Tax_Total__c, Is_Finance_Approved__c, Is_Site_Allocation_Line_Exists__c, Discount_Amount__c, Discount_Percent__c, Link_To_Pilot_Opportunity__c, AVA_SFCPQ__Inclusive_Tax_Amount__c from SBQQ__Quote__c"]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="tableName" ><![CDATA["[" ++ p('db.schema') ++ "].[SF_Prod_Quote]"]]></ee:set-variable>
+				<ee:set-variable variableName="values" ><![CDATA["(:Id,:OwnerId,:Name,:CreatedDate,:CurrencyIsoCode,:RecordTypeId,:SBQQ__Account__c,:SBQQ__BillingCity__c,:SBQQ__BillingCountry__c,:SBQQ__BillingFrequency__c,:SBQQ__BillingName__c,:SBQQ__BillingPostalCode__c,:SBQQ__BillingState__c,:SBQQ__BillingStreet__c,:SBQQ__ConsumptionRateOverride__c,:SBQQ__ContractingMethod__c,:SBQQ__CustomerDiscount__c,:SBQQ__DefaultTemplate__c,:SBQQ__DeliveryMethod__c,:SBQQ__DistributorDiscount__c,:SBQQ__Distributor__c,:SBQQ__DocumentStatus__c,:SBQQ__EmailTemplateId__c,:SBQQ__EndDate__c,:SBQQ__FirstSegmentTermEndDate__c,:SBQQ__GenerateContractedPrice__c,:SBQQ__Introduction__c,:SBQQ__Key__c,:SBQQ__LastCalculatedOn__c,:SBQQ__LastSavedOn__c,:SBQQ__LineItemsGrouped__c,:SBQQ__LineItemsPrinted__c,:SBQQ__MarkupRate__c,:SBQQ__MasterContract__c,:SBQQ__MasterEvergreenContract__c,:SBQQ__Notes__c,:SBQQ__Opportunity2__c,:SBQQ__OrderByQuoteLineGroup__c,:SBQQ__OrderBy__c,:SBQQ__OrderGroupID__c,:SBQQ__Ordered__c,:SBQQ__OriginalQuote__c,:SBQQ__PaperSize__c,:SBQQ__PartnerDiscount__c,:SBQQ__Partner__c,:SBQQ__PaymentTerms__c,:SBQQ__PriceBook__c,:SBQQ__PricebookId__c,:SBQQ__PrimaryContact__c,:SBQQ__Primary__c,:SBQQ__ProrationDayOfMonth__c,:SBQQ__QuoteLanguage__c,:SBQQ__QuoteProcessId__c,:SBQQ__QuoteTemplateId__c,:SBQQ__RenewalTerm__c,:SBQQ__RenewalUpliftRate__c,:SBQQ__SalesRep__c,:SBQQ__ShippingCity__c,:SBQQ__ShippingCountry__c,:SBQQ__ShippingName__c,:SBQQ__ShippingPostalCode__c,:SBQQ__ShippingState__c,:SBQQ__ShippingStreet__c,:SBQQ__Source__c,:SBQQ__StartDate__c,:SBQQ__Status__c,:SBQQ__SubscriptionTerm__c,:SBQQ__TargetCustomerAmount__c,:SBQQ__Type__c,:SBQQ__Unopened__c,:SBQQ__WatermarkShown__c,:SBQQ__LineItemCount__c,:SBQQ__AdditionalDiscountAmount__c,:SBQQ__AverageCustomerDiscount__c,:SBQQ__AveragePartnerDiscount__c,:SBQQ__DaysQuoteOpen__c,:SBQQ__ExpirationDate__c,:SBQQ__TotalCustomerDiscountAmount__c,:SBQQ__Uncalculated__c,:SBQQ__CustomerAmount__c,:SBQQ__ListAmount__c,:SBQQ__NetAmount__c,:SBQQ__RegularAmount__c,:dfscpq__CollectPayment__c,:dfscpq__SavePaymentMethod__c,:AVA_SFCPQ__AutomaticValidateAddress__c,:AVA_SFCPQ__AvaTaxMessage__c,:AVA_SFCPQ__Entity_Use_Code__c,:AVA_SFCPQ__Invoice_Message__c,:AVA_SFCPQ__Is_Seller_Importer_Of_Record__c,:AVA_SFCPQ__Quote_AutomateTaxCalculation__c,:AVA_SFCPQ__SalesTaxAmount__c,:AVA_SFCPQ__Tax_Calculation_Status__c,:AR_Or_Order_Management_User__c,:Account_Number__c,:Additional_Discount__c,:Additional_Payment_Terms__c,:ApprovalStatus__c,:Approval_Comment__c,:Approval_Date__c,:BillToAddress__c,:Bill_To_Account__c,:Bill_To_Address__c,:Bill_To_City__c,:Bill_To_Contact__c,:Billing_Frequency_Details__c,:Bundle_Line_Item_Count__c,:Bundle_Pricing__c,:Bundling_Vs_Itemized_Pricing__c,:Custom_Payment_Schedule__c,:Customer_Message__c,:Digital_License_Product_Count__c,:Discount_Price__c,:Early_Access_Justification__c,:Early_Access_Needed__c,:Early_Onboarding_Access_Required_By__c,:Exclude_Terms_Conditions__c,:Fields_needed_on_Quote_Template__c,:Generated_Date__c,:IL_Onboarding_Record__c,:Integration_Error_Message__c,:Integration_Sync_Status__c,:Invoice_No__c,:Is_Accepting_from_Flow__c,:Is_Escalation_Sent__c,:Is_Special_Terms_Available__c,:Is_Subsidy_IL_LLC__c,:Is_Subsidy_Twig__c,:Language__c,:Last_Viewed_Date__c,:Latest_Consumable_Date__c,:LineSortField__c,:Manager_of_Manager_of_Sales_Rep__c,:Manager_of_Sales_Rep__c,:Memo__c,:Net_Total_USD__c,:Onboarding_required__c,:Order__c,:PD_Net_Total__c,:PD_Products_Count__c,:PD_Total_Quantity__c,:PO_Date__c,:PO_Status__c,:Pack_Out_Code__c,:Payment_Schedule__c,:Po_Number__c,:Product_Codes__c,:Quote_Accepted_Date__c,:Quote_Header_Message__c,:Render_Template_Content__c,:SO_Number__c,:Ship_to_Address__c,:Shipping_Instructions__c,:Show_Components__c,:Show_Signature__c,:Special_Terms__c,:SubmittedDate__c,:SubmittedUser__c,:Subsidiary_Avatax__c,:Subsidiary__c,:Title__c,:Total_Amount__c,:Total_Customer_Discount__c,:Transaction_Type__c,:Xanedu_Custom_1__c,:Xanedu_Custom_2__c,:Xanedu_Custom_3__c,:Xanedu_Custom_4__c,:Xanedu_Custom_5__c,:Total_ACV__c,:Total_ARR__c,:Billing_Account_Private__c,:Document_Link__c,:Is_Account_In_Good_Standing_Approval__c,:Is_Employee_Sample_Quote__c,:Location__c,:PD_Specialist__c,:Payment_term_Approval_needed__c,:Rush_Order__c,:Shipping_Option__c,:Template_Logo_URL__c,:Remaining_Quantity_for_License_Product__c,:Total_Remaining_Quantity__c,:Duplicate_Product__c,:Subsidiary1__c,:Is_Tax_Amount_Calculated__c,:Is_Tax_calculated__c,:Tax_Calculation_Status__c,:Tax_Total__c,:Is_Finance_Approved__c,:Is_Site_Allocation_Line_Exists__c,:Discount_Amount__c,:Discount_Percent__c,:Link_To_Pilot_Opportunity__c,:AVA_SFCPQ__Inclusive_Tax_Amount__c)"]]></ee:set-variable>
+				<ee:set-variable variableName="columns" ><![CDATA[["Id","OwnerId","Name","CreatedDate","CurrencyIsoCode","RecordTypeId","SBQQ__Account__c","SBQQ__BillingCity__c","SBQQ__BillingCountry__c","SBQQ__BillingFrequency__c","SBQQ__BillingName__c","SBQQ__BillingPostalCode__c","SBQQ__BillingState__c","SBQQ__BillingStreet__c","SBQQ__ConsumptionRateOverride__c","SBQQ__ContractingMethod__c","SBQQ__CustomerDiscount__c","SBQQ__DefaultTemplate__c","SBQQ__DeliveryMethod__c","SBQQ__DistributorDiscount__c","SBQQ__Distributor__c","SBQQ__DocumentStatus__c","SBQQ__EmailTemplateId__c","SBQQ__EndDate__c","SBQQ__FirstSegmentTermEndDate__c","SBQQ__GenerateContractedPrice__c","SBQQ__Introduction__c","SBQQ__Key__c","SBQQ__LastCalculatedOn__c","SBQQ__LastSavedOn__c","SBQQ__LineItemsGrouped__c","SBQQ__LineItemsPrinted__c","SBQQ__MarkupRate__c","SBQQ__MasterContract__c","SBQQ__MasterEvergreenContract__c","SBQQ__Notes__c","SBQQ__Opportunity2__c","SBQQ__OrderByQuoteLineGroup__c","SBQQ__OrderBy__c","SBQQ__OrderGroupID__c","SBQQ__Ordered__c","SBQQ__OriginalQuote__c","SBQQ__PaperSize__c","SBQQ__PartnerDiscount__c","SBQQ__Partner__c","SBQQ__PaymentTerms__c","SBQQ__PriceBook__c","SBQQ__PricebookId__c","SBQQ__PrimaryContact__c","SBQQ__Primary__c","SBQQ__ProrationDayOfMonth__c","SBQQ__QuoteLanguage__c","SBQQ__QuoteProcessId__c","SBQQ__QuoteTemplateId__c","SBQQ__RenewalTerm__c","SBQQ__RenewalUpliftRate__c","SBQQ__SalesRep__c","SBQQ__ShippingCity__c","SBQQ__ShippingCountry__c","SBQQ__ShippingName__c","SBQQ__ShippingPostalCode__c","SBQQ__ShippingState__c","SBQQ__ShippingStreet__c","SBQQ__Source__c","SBQQ__StartDate__c","SBQQ__Status__c","SBQQ__SubscriptionTerm__c","SBQQ__TargetCustomerAmount__c","SBQQ__Type__c","SBQQ__Unopened__c","SBQQ__WatermarkShown__c","SBQQ__LineItemCount__c","SBQQ__AdditionalDiscountAmount__c","SBQQ__AverageCustomerDiscount__c","SBQQ__AveragePartnerDiscount__c","SBQQ__DaysQuoteOpen__c","SBQQ__ExpirationDate__c","SBQQ__TotalCustomerDiscountAmount__c","SBQQ__Uncalculated__c","SBQQ__CustomerAmount__c","SBQQ__ListAmount__c","SBQQ__NetAmount__c","SBQQ__RegularAmount__c","dfscpq__CollectPayment__c","dfscpq__SavePaymentMethod__c","AVA_SFCPQ__AutomaticValidateAddress__c","AVA_SFCPQ__AvaTaxMessage__c","AVA_SFCPQ__Entity_Use_Code__c","AVA_SFCPQ__Invoice_Message__c","AVA_SFCPQ__Is_Seller_Importer_Of_Record__c","AVA_SFCPQ__Quote_AutomateTaxCalculation__c","AVA_SFCPQ__SalesTaxAmount__c","AVA_SFCPQ__Tax_Calculation_Status__c","AR_Or_Order_Management_User__c","Account_Number__c","Additional_Discount__c","Additional_Payment_Terms__c","ApprovalStatus__c","Approval_Comment__c","Approval_Date__c","BillToAddress__c","Bill_To_Account__c","Bill_To_Address__c","Bill_To_City__c","Bill_To_Contact__c","Billing_Frequency_Details__c","Bundle_Line_Item_Count__c","Bundle_Pricing__c","Bundling_Vs_Itemized_Pricing__c","Custom_Payment_Schedule__c","Customer_Message__c","Digital_License_Product_Count__c","Discount_Price__c","Early_Access_Justification__c","Early_Access_Needed__c","Early_Onboarding_Access_Required_By__c","Exclude_Terms_Conditions__c","Fields_needed_on_Quote_Template__c","Generated_Date__c","IL_Onboarding_Record__c","Integration_Error_Message__c","Integration_Sync_Status__c","Invoice_No__c","Is_Accepting_from_Flow__c","Is_Escalation_Sent__c","Is_Special_Terms_Available__c","Is_Subsidy_IL_LLC__c","Is_Subsidy_Twig__c","Language__c","Last_Viewed_Date__c","Latest_Consumable_Date__c","LineSortField__c","Manager_of_Manager_of_Sales_Rep__c","Manager_of_Sales_Rep__c","Memo__c","Net_Total_USD__c","Onboarding_required__c","Order__c","PD_Net_Total__c","PD_Products_Count__c","PD_Total_Quantity__c","PO_Date__c","PO_Status__c","Pack_Out_Code__c","Payment_Schedule__c","Po_Number__c","Product_Codes__c","Quote_Accepted_Date__c","Quote_Header_Message__c","Render_Template_Content__c","SO_Number__c","Ship_to_Address__c","Shipping_Instructions__c","Show_Components__c","Show_Signature__c","Special_Terms__c","SubmittedDate__c","SubmittedUser__c","Subsidiary_Avatax__c","Subsidiary__c","Title__c","Total_Amount__c","Total_Customer_Discount__c","Transaction_Type__c","Xanedu_Custom_1__c","Xanedu_Custom_2__c","Xanedu_Custom_3__c","Xanedu_Custom_4__c","Xanedu_Custom_5__c","Total_ACV__c","Total_ARR__c","Billing_Account_Private__c","Document_Link__c","Is_Account_In_Good_Standing_Approval__c","Is_Employee_Sample_Quote__c","Location__c","PD_Specialist__c","Payment_term_Approval_needed__c","Rush_Order__c","Shipping_Option__c","Template_Logo_URL__c","Remaining_Quantity_for_License_Product__c","Total_Remaining_Quantity__c","Duplicate_Product__c","Subsidiary1__c","Is_Tax_Amount_Calculated__c","Is_Tax_calculated__c","Tax_Calculation_Status__c","Tax_Total__c","Is_Finance_Approved__c","Is_Site_Allocation_Line_Exists__c","Discount_Amount__c","Discount_Percent__c","Link_To_Pilot_Opportunity__c","AVA_SFCPQ__Inclusive_Tax_Amount__c"]]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="b0e80e6d-bfeb-4426-8001-a5feb301c7ed" name="query-in-salesforce-subFlow" />
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="36d2457d-bc75-4fb7-a706-f17f72c1ac2b" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="2a36088e-761a-446e-8a82-1d4743f255c7">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id":record.Id,
+"OwnerId":record.OwnerId,
+"Name":record.Name,
+"CreatedDate":record.CreatedDate,
+"CurrencyIsoCode":record.CurrencyIsoCode,
+"RecordTypeId":record.RecordTypeId,
+"SBQQ__Account__c":record.SBQQ__Account__c,
+"SBQQ__BillingCity__c":record.SBQQ__BillingCity__c,
+"SBQQ__BillingCountry__c":record.SBQQ__BillingCountry__c,
+"SBQQ__BillingFrequency__c":record.SBQQ__BillingFrequency__c,
+"SBQQ__BillingName__c":record.SBQQ__BillingName__c,
+"SBQQ__BillingPostalCode__c":record.SBQQ__BillingPostalCode__c,
+"SBQQ__BillingState__c":record.SBQQ__BillingState__c,
+"SBQQ__BillingStreet__c":record.SBQQ__BillingStreet__c,
+"SBQQ__ConsumptionRateOverride__c":record.SBQQ__ConsumptionRateOverride__c,
+"SBQQ__ContractingMethod__c":record.SBQQ__ContractingMethod__c,
+"SBQQ__CustomerDiscount__c":record.SBQQ__CustomerDiscount__c,
+"SBQQ__DefaultTemplate__c":record.SBQQ__DefaultTemplate__c,
+"SBQQ__DeliveryMethod__c":record.SBQQ__DeliveryMethod__c,
+"SBQQ__DistributorDiscount__c":record.SBQQ__DistributorDiscount__c,
+"SBQQ__Distributor__c":record.SBQQ__Distributor__c,
+"SBQQ__DocumentStatus__c":record.SBQQ__DocumentStatus__c,
+"SBQQ__EmailTemplateId__c":record.SBQQ__EmailTemplateId__c,
+"SBQQ__EndDate__c":record.SBQQ__EndDate__c,
+"SBQQ__FirstSegmentTermEndDate__c":record.SBQQ__FirstSegmentTermEndDate__c,
+"SBQQ__GenerateContractedPrice__c":record.SBQQ__GenerateContractedPrice__c,
+"SBQQ__Introduction__c":record.SBQQ__Introduction__c,
+"SBQQ__Key__c":record.SBQQ__Key__c,
+"SBQQ__LastCalculatedOn__c":record.SBQQ__LastCalculatedOn__c,
+"SBQQ__LastSavedOn__c":record.SBQQ__LastSavedOn__c,
+"SBQQ__LineItemsGrouped__c":record.SBQQ__LineItemsGrouped__c,
+"SBQQ__LineItemsPrinted__c":record.SBQQ__LineItemsPrinted__c,
+"SBQQ__MarkupRate__c":record.SBQQ__MarkupRate__c,
+"SBQQ__MasterContract__c":record.SBQQ__MasterContract__c,
+"SBQQ__MasterEvergreenContract__c":record.SBQQ__MasterEvergreenContract__c,
+"SBQQ__Notes__c":record.SBQQ__Notes__c,
+"SBQQ__Opportunity2__c":record.SBQQ__Opportunity2__c,
+"SBQQ__OrderByQuoteLineGroup__c":record.SBQQ__OrderByQuoteLineGroup__c,
+"SBQQ__OrderBy__c":record.SBQQ__OrderBy__c,
+"SBQQ__OrderGroupID__c":record.SBQQ__OrderGroupID__c,
+"SBQQ__Ordered__c":record.SBQQ__Ordered__c,
+"SBQQ__OriginalQuote__c":record.SBQQ__OriginalQuote__c,
+"SBQQ__PaperSize__c":record.SBQQ__PaperSize__c,
+"SBQQ__PartnerDiscount__c":record.SBQQ__PartnerDiscount__c,
+"SBQQ__Partner__c":record.SBQQ__Partner__c,
+"SBQQ__PaymentTerms__c":record.SBQQ__PaymentTerms__c,
+"SBQQ__PriceBook__c":record.SBQQ__PriceBook__c,
+"SBQQ__PricebookId__c":record.SBQQ__PricebookId__c,
+"SBQQ__PrimaryContact__c":record.SBQQ__PrimaryContact__c,
+"SBQQ__Primary__c":record.SBQQ__Primary__c,
+"SBQQ__ProrationDayOfMonth__c":record.SBQQ__ProrationDayOfMonth__c,
+"SBQQ__QuoteLanguage__c":record.SBQQ__QuoteLanguage__c,
+"SBQQ__QuoteProcessId__c":record.SBQQ__QuoteProcessId__c,
+"SBQQ__QuoteTemplateId__c":record.SBQQ__QuoteTemplateId__c,
+"SBQQ__RenewalTerm__c":record.SBQQ__RenewalTerm__c,
+"SBQQ__RenewalUpliftRate__c":record.SBQQ__RenewalUpliftRate__c,
+"SBQQ__SalesRep__c":record.SBQQ__SalesRep__c,
+"SBQQ__ShippingCity__c":record.SBQQ__ShippingCity__c,
+"SBQQ__ShippingCountry__c":record.SBQQ__ShippingCountry__c,
+"SBQQ__ShippingName__c":record.SBQQ__ShippingName__c,
+"SBQQ__ShippingPostalCode__c":record.SBQQ__ShippingPostalCode__c,
+"SBQQ__ShippingState__c":record.SBQQ__ShippingState__c,
+"SBQQ__ShippingStreet__c":record.SBQQ__ShippingStreet__c,
+"SBQQ__Source__c":record.SBQQ__Source__c,
+"SBQQ__StartDate__c":record.SBQQ__StartDate__c,
+"SBQQ__Status__c":record.SBQQ__Status__c,
+"SBQQ__SubscriptionTerm__c":record.SBQQ__SubscriptionTerm__c,
+"SBQQ__TargetCustomerAmount__c":record.SBQQ__TargetCustomerAmount__c,
+"SBQQ__Type__c":record.SBQQ__Type__c,
+"SBQQ__Unopened__c":record.SBQQ__Unopened__c,
+"SBQQ__WatermarkShown__c":record.SBQQ__WatermarkShown__c,
+"SBQQ__LineItemCount__c":record.SBQQ__LineItemCount__c,
+"SBQQ__AdditionalDiscountAmount__c":record.SBQQ__AdditionalDiscountAmount__c,
+"SBQQ__AverageCustomerDiscount__c":record.SBQQ__AverageCustomerDiscount__c,
+"SBQQ__AveragePartnerDiscount__c":record.SBQQ__AveragePartnerDiscount__c,
+"SBQQ__DaysQuoteOpen__c":record.SBQQ__DaysQuoteOpen__c,
+"SBQQ__ExpirationDate__c":record.SBQQ__ExpirationDate__c,
+"SBQQ__TotalCustomerDiscountAmount__c":record.SBQQ__TotalCustomerDiscountAmount__c,
+"SBQQ__Uncalculated__c":record.SBQQ__Uncalculated__c,
+"SBQQ__CustomerAmount__c":record.SBQQ__CustomerAmount__c,
+"SBQQ__ListAmount__c":record.SBQQ__ListAmount__c,
+"SBQQ__NetAmount__c":record.SBQQ__NetAmount__c,
+"SBQQ__RegularAmount__c":record.SBQQ__RegularAmount__c,
+"dfscpq__CollectPayment__c":record.dfscpq__CollectPayment__c,
+"dfscpq__SavePaymentMethod__c":record.dfscpq__SavePaymentMethod__c,
+"AVA_SFCPQ__AutomaticValidateAddress__c":record.AVA_SFCPQ__AutomaticValidateAddress__c,
+"AVA_SFCPQ__AvaTaxMessage__c":record.AVA_SFCPQ__AvaTaxMessage__c,
+"AVA_SFCPQ__Entity_Use_Code__c":record.AVA_SFCPQ__Entity_Use_Code__c,
+"AVA_SFCPQ__Invoice_Message__c":record.AVA_SFCPQ__Invoice_Message__c,
+"AVA_SFCPQ__Is_Seller_Importer_Of_Record__c":record.AVA_SFCPQ__Is_Seller_Importer_Of_Record__c,
+"AVA_SFCPQ__Quote_AutomateTaxCalculation__c":record.AVA_SFCPQ__Quote_AutomateTaxCalculation__c,
+"AVA_SFCPQ__SalesTaxAmount__c":record.AVA_SFCPQ__SalesTaxAmount__c,
+"AVA_SFCPQ__Tax_Calculation_Status__c":record.AVA_SFCPQ__Tax_Calculation_Status__c,
+"AR_Or_Order_Management_User__c":record.AR_Or_Order_Management_User__c,
+"Account_Number__c":record.Account_Number__c,
+"Additional_Discount__c":record.Additional_Discount__c,
+"Additional_Payment_Terms__c":record.Additional_Payment_Terms__c,
+"ApprovalStatus__c":record.ApprovalStatus__c,
+"Approval_Comment__c":record.Approval_Comment__c,
+"Approval_Date__c":record.Approval_Date__c,
+"BillToAddress__c":record.BillToAddress__c,
+"Bill_To_Account__c":record.Bill_To_Account__c,
+"Bill_To_Address__c":record.Bill_To_Address__c,
+"Bill_To_City__c":record.Bill_To_City__c,
+"Bill_To_Contact__c":record.Bill_To_Contact__c,
+"Billing_Frequency_Details__c":record.Billing_Frequency_Details__c,
+"Bundle_Line_Item_Count__c":record.Bundle_Line_Item_Count__c,
+"Bundle_Pricing__c":record.Bundle_Pricing__c,
+"Bundling_Vs_Itemized_Pricing__c":record.Bundling_Vs_Itemized_Pricing__c,
+"Custom_Payment_Schedule__c":record.Custom_Payment_Schedule__c,
+"Customer_Message__c":record.Customer_Message__c,
+"Digital_License_Product_Count__c":record.Digital_License_Product_Count__c,
+"Discount_Price__c":record.Discount_Price__c,
+"Early_Access_Justification__c":record.Early_Access_Justification__c,
+"Early_Access_Needed__c":record.Early_Access_Needed__c,
+"Early_Onboarding_Access_Required_By__c":record.Early_Onboarding_Access_Required_By__c,
+"Exclude_Terms_Conditions__c":record.Exclude_Terms_Conditions__c,
+"Fields_needed_on_Quote_Template__c":record.Fields_needed_on_Quote_Template__c,
+"Generated_Date__c":record.Generated_Date__c,
+"IL_Onboarding_Record__c":record.IL_Onboarding_Record__c,
+"Integration_Error_Message__c":record.Integration_Error_Message__c,
+"Integration_Sync_Status__c":record.Integration_Sync_Status__c,
+"Invoice_No__c":record.Invoice_No__c,
+"Is_Accepting_from_Flow__c":record.Is_Accepting_from_Flow__c,
+"Is_Escalation_Sent__c":record.Is_Escalation_Sent__c,
+"Is_Special_Terms_Available__c":record.Is_Special_Terms_Available__c,
+"Is_Subsidy_IL_LLC__c":record.Is_Subsidy_IL_LLC__c,
+"Is_Subsidy_Twig__c":record.Is_Subsidy_Twig__c,
+"Language__c":record.Language__c,
+"Last_Viewed_Date__c":record.Last_Viewed_Date__c,
+"Latest_Consumable_Date__c":record.Latest_Consumable_Date__c,
+"LineSortField__c":record.LineSortField__c,
+"Manager_of_Manager_of_Sales_Rep__c":record.Manager_of_Manager_of_Sales_Rep__c,
+"Manager_of_Sales_Rep__c":record.Manager_of_Sales_Rep__c,
+"Memo__c":record.Memo__c,
+"Net_Total_USD__c":record.Net_Total_USD__c,
+"Onboarding_required__c":record.Onboarding_required__c,
+"Order__c":record.Order__c,
+"PD_Net_Total__c":record.PD_Net_Total__c,
+"PD_Products_Count__c":record.PD_Products_Count__c,
+"PD_Total_Quantity__c":record.PD_Total_Quantity__c,
+"PO_Date__c":record.PO_Date__c,
+"PO_Status__c":record.PO_Status__c,
+"Pack_Out_Code__c":record.Pack_Out_Code__c,
+"Payment_Schedule__c":record.Payment_Schedule__c,
+"Po_Number__c":record.Po_Number__c,
+"Product_Codes__c":record.Product_Codes__c,
+"Quote_Accepted_Date__c":record.Quote_Accepted_Date__c,
+"Quote_Header_Message__c":record.Quote_Header_Message__c,
+"Render_Template_Content__c":record.Render_Template_Content__c,
+"SO_Number__c":record.SO_Number__c,
+"Ship_to_Address__c":record.Ship_to_Address__c,
+"Shipping_Instructions__c":record.Shipping_Instructions__c,
+"Show_Components__c":record.Show_Components__c,
+"Show_Signature__c":record.Show_Signature__c,
+"Special_Terms__c":record.Special_Terms__c,
+"SubmittedDate__c":record.SubmittedDate__c,
+"SubmittedUser__c":record.SubmittedUser__c,
+"Subsidiary_Avatax__c":record.Subsidiary_Avatax__c,
+"Subsidiary__c":record.Subsidiary__c,
+"Title__c":record.Title__c,
+"Total_Amount__c":record.Total_Amount__c,
+"Total_Customer_Discount__c":record.Total_Customer_Discount__c,
+"Transaction_Type__c":record.Transaction_Type__c,
+"Xanedu_Custom_1__c":record.Xanedu_Custom_1__c,
+"Xanedu_Custom_2__c":record.Xanedu_Custom_2__c,
+"Xanedu_Custom_3__c":record.Xanedu_Custom_3__c,
+"Xanedu_Custom_4__c":record.Xanedu_Custom_4__c,
+"Xanedu_Custom_5__c":record.Xanedu_Custom_5__c,
+"Total_ACV__c":record.Total_ACV__c,
+"Total_ARR__c":record.Total_ARR__c,
+"Billing_Account_Private__c":record.Billing_Account_Private__c,
+"Document_Link__c":record.Document_Link__c,
+"Is_Account_In_Good_Standing_Approval__c":record.Is_Account_In_Good_Standing_Approval__c,
+"Is_Employee_Sample_Quote__c":record.Is_Employee_Sample_Quote__c,
+"Location__c":record.Location__c,
+"PD_Specialist__c":record.PD_Specialist__c,
+"Payment_term_Approval_needed__c":record.Payment_term_Approval_needed__c,
+"Rush_Order__c":record.Rush_Order__c,
+"Shipping_Option__c":record.Shipping_Option__c,
+"Template_Logo_URL__c":record.Template_Logo_URL__c,
+"Remaining_Quantity_for_License_Product__c":record.Remaining_Quantity_for_License_Product__c,
+"Total_Remaining_Quantity__c":record.Total_Remaining_Quantity__c,
+"Duplicate_Product__c":record.Duplicate_Product__c,
+"Subsidiary1__c":record.Subsidiary1__c,
+"Is_Tax_Amount_Calculated__c":record.Is_Tax_Amount_Calculated__c,
+"Is_Tax_calculated__c":record.Is_Tax_calculated__c,
+"Tax_Calculation_Status__c":record.Tax_Calculation_Status__c,
+"Tax_Total__c":record.Tax_Total__c,
+"Is_Finance_Approved__c":record.Is_Finance_Approved__c,
+"Is_Site_Allocation_Line_Exists__c":record.Is_Site_Allocation_Line_Exists__c,
+"Discount_Amount__c":record.Discount_Amount__c,
+"Discount_Percent__c":record.Discount_Percent__c,
+"Link_To_Pilot_Opportunity__c":record.Link_To_Pilot_Opportunity__c,
+"AVA_SFCPQ__Inclusive_Tax_Amount__c":record.AVA_SFCPQ__Inclusive_Tax_Amount__c
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="4cd2e6b4-52cb-4723-8e43-498cfdb9527e" name="insert-to-database-subFlow" />
+	</sub-flow>
+	<sub-flow name="quoteLine-loadtodb-subflow" doc:id="114eeda7-9999-4580-808d-5eeba0323616" >
+		<ee:transform doc:name="QuoteLine" doc:id="00644eb0-5680-4ca8-93e1-3e34e9d42b5d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+"select Id,SBQQ__SubscriptionTerm__c,SBQQ__Product__c,SBQQ__Quote__c,Override_Description__c,SBQQ__NetTotal__c,Description1__c,Product_Type__c,Site__c,Site_Location__c,SBQQ__ProductOption__c,SBQQ__RequiredBy__c,Transaction_Type__c,SBQQ__SpecialPrice__c,SBQQ__TermDiscountSchedule__c,SBQQ__CustomerPrice__c,SBQQ__MarkupRate__c,Is_Bundle__c,SBQQ__StartDate__c,SBQQ__EndDate__c,Concat_Data__c,Netsuite_CPQ_ID__c,Is_Consumable_Kit__c,Format__c, Grade__c, Language__c, Location__c, Standards__c, UPC_Code__c, SBQQ__Description__c, SF_NS_ID__c from SBQQ__QuoteLine__c"]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="tableName" ><![CDATA["[" ++ p('db.schema') ++ "].[SF_QuoteLine]"]]></ee:set-variable>
+				<ee:set-variable variableName="values" ><![CDATA["(:Id,:SBQQ__SubscriptionTerm__c,:SBQQ__Product__c,:SBQQ__Quote__c,:Override_Description__c,:SBQQ__NetTotal__c,:Description1__c,:Product_Type__c,:Site__c,:Site_Location__c,:SBQQ__ProductOption__c,:SBQQ__RequiredBy__c,:Transaction_Type__c,:SBQQ__SpecialPrice__c,:SBQQ__TermDiscountSchedule__c,:SBQQ__CustomerPrice__c,:SBQQ__MarkupRate__c,:Is_Bundle__c,:SBQQ__StartDate__c,:SBQQ__EndDate__c,:Concat_Data__c,:Netsuite_CPQ_ID__c,:Is_Consumable_Kit__c,:Format__c,:Grade__c,:Language__c,:Location__c,:Standards__c,:UPC_Code__c,:SBQQ__Description__c,:SF_NS_Id__c)"]]></ee:set-variable>
+				<ee:set-variable variableName="columns" ><![CDATA[["Id","SBQQ__SubscriptionTerm__c","SBQQ__Product__c","SBQQ__Quote__c","Override_Description__c","SBQQ__NetTotal__c","Description1__c","Product_Type__c","Site__c","Site_Location__c","SBQQ__ProductOption__c","SBQQ__RequiredBy__c","Transaction_Type__c","SBQQ__SpecialPrice__c","SBQQ__TermDiscountSchedule__c","SBQQ__CustomerPrice__c","SBQQ__MarkupRate__c","Is_Bundle__c","SBQQ__StartDate__c","SBQQ__EndDate__c","Concat_Data__c","Netsuite_CPQ_ID__c","Is_Consumable_Kit__c","Format__c","Grade__c","Language__c","Location__c","Standards__c","UPC_Code__c","SBQQ__Description__c","SF_NS_Id__c"]]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="73335265-1d8b-4a59-a1c3-051993f6f19b" name="query-in-salesforce-subFlow" />
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="689795a2-3722-4551-86cc-d22385baf015" name="truncate-table-in-database-subFlow" />
+		<foreach doc:name="For Each" doc:id="c51cb260-90bf-435c-be71-61eace429a8a" batchSize="${db.insertBatchSize}">
+			<ee:transform doc:name="Transform Message" doc:id="553a95a3-fb51-486f-aa51-86cd2933a411">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id":record.Id,
+"SBQQ__SubscriptionTerm__c":record.SBQQ__SubscriptionTerm__c,
+"SBQQ__Product__c":record.SBQQ__Product__c,
+"SBQQ__Quote__c":record.SBQQ__Quote__c,
+"Override_Description__c":record.Override_Description__c,
+"SBQQ__NetTotal__c":record.SBQQ__NetTotal__c,
+"Description1__c":record.Description1__c,
+"Product_Type__c":record.Product_Type__c,
+"Site__c":record.Site__c,
+"Site_Location__c":record.Site_Location__c,
+"SBQQ__ProductOption__c":record.SBQQ__ProductOption__c,
+"SBQQ__RequiredBy__c":record.SBQQ__RequiredBy__c,
+"Transaction_Type__c":record.Transaction_Type__c,
+"SBQQ__SpecialPrice__c":record.SBQQ__SpecialPrice__c,
+"SBQQ__TermDiscountSchedule__c":record.SBQQ__TermDiscountSchedule__c,
+"SBQQ__CustomerPrice__c":record.SBQQ__CustomerPrice__c,
+"SBQQ__MarkupRate__c":record.SBQQ__MarkupRate__c,
+"Is_Bundle__c":record.Is_Bundle__c,
+"SBQQ__StartDate__c":record.SBQQ__StartDate__c,
+"SBQQ__EndDate__c":record.SBQQ__EndDate__c,
+"Concat_Data__c":record.Concat_Data__c,
+"Netsuite_CPQ_ID__c":record.Netsuite_CPQ_ID__c,
+"Is_Consumable_Kit__c":record.Is_Consumable_Kit__c,
+"Format__c":record.Format__c,
+"Grade__c":record.Grade__c,
+"Language__c":record.Language__c,
+"Location__c":record.Location__c,
+"Standards__c":record.Standards__c,
+"UPC_Code__c":record.UPC_Code__c,
+"SBQQ__Description__c":record.SBQQ__Description__c,
+"SF_NS_Id__c":record.SF_NS_ID__c
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			<flow-ref doc:name="insert-to-database-subFlow" doc:id="943de9e2-5c46-41e9-ba45-59e3a5b23a9f" name="insert-to-database-subFlow" />
+			<logger level="INFO" doc:name="Logger" doc:id="e9002c78-e7ca-42ed-aa24-8375003caf2e" message="Insert in Database completed for batch #[vars.counter]"/>
+		</foreach>
+	</sub-flow>
+	<sub-flow name="siteLocation-loadtodb-subflow" doc:id="64c8e19f-2fbc-4760-bd20-1d9990cb898c" >
+		<ee:transform doc:name="siteLocation" doc:id="845929fd-75c3-43f5-87a0-d311fc122afd" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+"select Id,OwnerId,IsDeleted,Name,CurrencyIsoCode,QuoteEndDate__c,QuoteStartDate__c,Quote_Account_Number__c,Quote__c,ShippingAddress__c,Site__c,Category1__c,Account_Enrollement_Size__c from Site_Location__c"]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="tableName" ><![CDATA["[" ++ p('db.schema') ++ "].[SF_Site_Location]"]]></ee:set-variable>
+				<ee:set-variable variableName="values" ><![CDATA["(:Id,:OwnerId,:IsDeleted,:Name,:CurrencyIsoCode,:QuoteEndDate__c,:QuoteStartDate__c,:Quote_Account_Number__c,:Quote__c,:ShippingAddress__c,:Site__c,:Category1__c)"]]></ee:set-variable>
+				<ee:set-variable variableName="columns" ><![CDATA[["Id","OwnerId","IsDeleted","Name","CurrencyIsoCode","QuoteEndDate__c","QuoteStartDate__c","Quote_Account_Number__c","Quote__c","ShippingAddress__c","Site__c","Category1__c"]]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="8a4b7eb8-0838-4cd6-89bb-a89f1a475d3f" name="query-in-salesforce-subFlow" />
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="029ca33e-c274-4f03-bfef-279581531a5e" name="truncate-table-in-database-subFlow" />
+		<ee:transform doc:name="Transform Message" doc:id="af70dcc4-45c0-45f8-a07d-5435613e9ece" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id":record.Id,
+"OwnerId":record.OwnerId,
+"IsDeleted":record.IsDeleted,
+"Name":record.Name,
+"CurrencyIsoCode":record.CurrencyIsoCode,
+"QuoteEndDate__c":record.QuoteEndDate__c,
+"QuoteStartDate__c":record.QuoteStartDate__c,
+"Quote_Account_Number__c":record.Quote_Account_Number__c,
+"Quote__c":record.Quote__c,
+"ShippingAddress__c":record.ShippingAddress__c,
+"Site__c":record.Site__c,
+"Category1__c":record.Category1__c
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="3c5d80a1-6529-4f10-a0d1-5ccd34c4d718" name="insert-to-database-subFlow" />
+	</sub-flow>
+	<sub-flow name="Assets-loadtodb-subflow" doc:id="3eaff984-e184-4f26-b678-9a9b6d81cd19" >
+		<ee:transform doc:name="Assets" doc:id="81369a2c-664b-4af1-84e1-41566a0a87dd" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+"select Id,ContactId,AccountId,ParentId,RootAssetId,Product2Id,ProductCode,IsCompetitorProduct,CreatedDate,CreatedById,LastModifiedDate,LastModifiedById,SystemModstamp,IsDeleted,CurrencyIsoCode,Name,SerialNumber,InstallDate,PurchaseDate,UsageEndDate,LifecycleStartDate,LifecycleEndDate,Status,Price,Quantity,Description,OwnerId,AssetProvidedById,AssetServicedById,IsInternal,AssetLevel,StockKeepingUnit,HasLifecycleManagement,CurrentMrr,CurrentLifecycleEndDate,CurrentQuantity,CurrentAmount,TotalLifecycleAmount,Street,City,State,PostalCode,Country,StateCode,CountryCode,Latitude,Longitude,GeocodeAccuracy,LastViewedDate,LastReferencedDate,SBQQ__AdditionalDiscountAmount__c,SBQQ__BillingFrequency__c,SBQQ__BillingType__c,SBQQ__Bundle__c,SBQQ__BundledQuantity__c,SBQQ__Bundled__c,SBQQ__ChargeType__c,SBQQ__CombineKey__c,SBQQ__ComponentDiscountedByPackage__c,SBQQ__CurrentSubscription__c,SBQQ__DiscountScheduleType__c,SBQQ__DiscountSchedule__c,SBQQ__Discount__c,SBQQ__DistributorDiscount__c,SBQQ__DynamicOptionId__c,SBQQ__FromServiceCloud__c,SBQQ__LatestQuoteLine__c,SBQQ__ListPrice__c,SBQQ__MarkupAmount__c,SBQQ__MarkupRate__c,SBQQ__Number__c,SBQQ__OptionDiscountAmount__c,SBQQ__OptionDiscount__c,SBQQ__OptionLevel__c,SBQQ__OptionType__c,SBQQ__OrderProduct__c,SBQQ__OriginalUnitCost__c,SBQQ__PackageProductCode__c,SBQQ__PackageProductDescription__c,SBQQ__PartnerDiscount__c,SBQQ__PriceDimension__c,SBQQ__PricingMethod__c,SBQQ__ProductOption__c,SBQQ__QuoteLine__c,SBQQ__RegularPrice__c,SBQQ__RenewalUpliftRate__c,SBQQ__RequiredByAsset__c,SBQQ__RequiredById__c,SBQQ__RequiredByProduct__c,SBQQ__RequiredBySubscription__c,SBQQ__RevisedAsset__c,SBQQ__RootAsset__c,SBQQ__RootId__c,SBQQ__SegmentIndex__c,SBQQ__SegmentKey__c,SBQQ__SegmentLabel__c,SBQQ__SubscriptionEndDate__c,SBQQ__SubscriptionQuoteLine__c,SBQQ__SubscriptionStartDate__c,SBQQ__Subscription__c,SBQQ__TermDiscountSchedule__c,SBQQ__UnitCost__c,SBQQ__VirtualAsset__c,SBQQ__CreditProductId__c,SBQQ__Dimension__c,Description1__c,Format__c,Grade__c,Language__c,Location__c,Standards__c,Site__c,One_Time_Discount__c,Project_Configuration__c,SF_NS_ID__c,Net_Total__c,Data_Migration_Legacy_Id__c from Asset"]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="tableName" ><![CDATA["[" ++ p('db.schema') ++ "].[SF_Asset]"]]></ee:set-variable>
+				<ee:set-variable variableName="values" ><![CDATA["(:Id,:ContactId,:AccountId,:ParentId,:RootAssetId,:Product2Id,:ProductCode,:IsCompetitorProduct,:CreatedDate,:CreatedById,:LastModifiedDate,:LastModifiedById,:SystemModstamp,:IsDeleted,:CurrencyIsoCode,:Name,:SerialNumber,:InstallDate,:PurchaseDate,:UsageEndDate,:LifecycleStartDate,:LifecycleEndDate,:Status,:Price,:Quantity,:Description,:OwnerId,:AssetProvidedById,:AssetServicedById,:IsInternal,:AssetLevel,:StockKeepingUnit,:HasLifecycleManagement,:CurrentMrr,:CurrentLifecycleEndDate,:CurrentQuantity,:CurrentAmount,:TotalLifecycleAmount,:Street,:City,:State,:PostalCode,:Country,:StateCode,:CountryCode,:Latitude,:Longitude,:GeocodeAccuracy,:LastViewedDate,:LastReferencedDate,:SBQQ__AdditionalDiscountAmount__c,:SBQQ__BillingFrequency__c,:SBQQ__BillingType__c,:SBQQ__Bundle__c,:SBQQ__BundledQuantity__c,:SBQQ__Bundled__c,:SBQQ__ChargeType__c,:SBQQ__CombineKey__c,:SBQQ__ComponentDiscountedByPackage__c,:SBQQ__CurrentSubscription__c,:SBQQ__DiscountScheduleType__c,:SBQQ__DiscountSchedule__c,:SBQQ__Discount__c,:SBQQ__DistributorDiscount__c,:SBQQ__DynamicOptionId__c,:SBQQ__FromServiceCloud__c,:SBQQ__LatestQuoteLine__c,:SBQQ__ListPrice__c,:SBQQ__MarkupAmount__c,:SBQQ__MarkupRate__c,:SBQQ__Number__c,:SBQQ__OptionDiscountAmount__c,:SBQQ__OptionDiscount__c,:SBQQ__OptionLevel__c,:SBQQ__OptionType__c,:SBQQ__OrderProduct__c,:SBQQ__OriginalUnitCost__c,:SBQQ__PackageProductCode__c,:SBQQ__PackageProductDescription__c,:SBQQ__PartnerDiscount__c,:SBQQ__PriceDimension__c,:SBQQ__PricingMethod__c,:SBQQ__ProductOption__c,:SBQQ__QuoteLine__c,:SBQQ__RegularPrice__c,:SBQQ__RenewalUpliftRate__c,:SBQQ__RequiredByAsset__c,:SBQQ__RequiredById__c,:SBQQ__RequiredByProduct__c,:SBQQ__RequiredBySubscription__c,:SBQQ__RevisedAsset__c,:SBQQ__RootAsset__c,:SBQQ__RootId__c,:SBQQ__SegmentIndex__c,:SBQQ__SegmentKey__c,:SBQQ__SegmentLabel__c,:SBQQ__SubscriptionEndDate__c,:SBQQ__SubscriptionQuoteLine__c,:SBQQ__SubscriptionStartDate__c,:SBQQ__Subscription__c,:SBQQ__TermDiscountSchedule__c,:SBQQ__UnitCost__c,:SBQQ__VirtualAsset__c,:SBQQ__CreditProductId__c,:SBQQ__Dimension__c,:AVA_SFCPQ__SalesTaxAmount__c,:Description1__c,:Format__c,:Grade__c,:Language__c,:Location__c,:Standards__c,:Site__c,:One_Time_Discount__c,:Project_Configuration__c,:SF_NS_ID__c,:Net_Total__c,:Data_Migration_Legacy_Id__c)"]]></ee:set-variable>
+				<ee:set-variable variableName="columns" ><![CDATA[["Id","ContactId","AccountId","ParentId","RootAssetId","Product2Id","ProductCode","IsCompetitorProduct","CreatedDate","CreatedById","LastModifiedDate","LastModifiedById","SystemModstamp","IsDeleted","CurrencyIsoCode","Name","SerialNumber","InstallDate","PurchaseDate","UsageEndDate","LifecycleStartDate","LifecycleEndDate","Status","Price","Quantity","Description","OwnerId","AssetProvidedById","AssetServicedById","IsInternal","AssetLevel","StockKeepingUnit","HasLifecycleManagement","CurrentMrr","CurrentLifecycleEndDate","CurrentQuantity","CurrentAmount","TotalLifecycleAmount","Street","City","State","PostalCode","Country","StateCode","CountryCode","Latitude","Longitude","GeocodeAccuracy","LastViewedDate","LastReferencedDate","SBQQ__AdditionalDiscountAmount__c","SBQQ__BillingFrequency__c","SBQQ__BillingType__c","SBQQ__Bundle__c","SBQQ__BundledQuantity__c","SBQQ__Bundled__c","SBQQ__ChargeType__c","SBQQ__CombineKey__c","SBQQ__ComponentDiscountedByPackage__c","SBQQ__CurrentSubscription__c","SBQQ__DiscountScheduleType__c","SBQQ__DiscountSchedule__c","SBQQ__Discount__c","SBQQ__DistributorDiscount__c","SBQQ__DynamicOptionId__c","SBQQ__FromServiceCloud__c","SBQQ__LatestQuoteLine__c","SBQQ__ListPrice__c","SBQQ__MarkupAmount__c","SBQQ__MarkupRate__c","SBQQ__Number__c","SBQQ__OptionDiscountAmount__c","SBQQ__OptionDiscount__c","SBQQ__OptionLevel__c","SBQQ__OptionType__c","SBQQ__OrderProduct__c","SBQQ__OriginalUnitCost__c","SBQQ__PackageProductCode__c","SBQQ__PackageProductDescription__c","SBQQ__PartnerDiscount__c","SBQQ__PriceDimension__c","SBQQ__PricingMethod__c","SBQQ__ProductOption__c","SBQQ__QuoteLine__c","SBQQ__RegularPrice__c","SBQQ__RenewalUpliftRate__c","SBQQ__RequiredByAsset__c","SBQQ__RequiredById__c","SBQQ__RequiredByProduct__c","SBQQ__RequiredBySubscription__c","SBQQ__RevisedAsset__c","SBQQ__RootAsset__c","SBQQ__RootId__c","SBQQ__SegmentIndex__c","SBQQ__SegmentKey__c","SBQQ__SegmentLabel__c","SBQQ__SubscriptionEndDate__c","SBQQ__SubscriptionQuoteLine__c","SBQQ__SubscriptionStartDate__c","SBQQ__Subscription__c","SBQQ__TermDiscountSchedule__c","SBQQ__UnitCost__c","SBQQ__VirtualAsset__c","SBQQ__CreditProductId__c","SBQQ__Dimension__c","AVA_SFCPQ__SalesTaxAmount__c","Description1__c","Format__c","Grade__c","Language__c","Location__c","Standards__c","Site__c","One_Time_Discount__c","Project_Configuration__c","SF_NS_ID__c","Net_Total__c","Data_Migration_Legacy_Id__c"]]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="0f282339-b88c-48f6-9f91-73386ed85659" name="query-in-salesforce-subFlow" />
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="dfcfd8e0-8566-489b-8755-2ca1bb9f92cf" name="truncate-table-in-database-subFlow" />
+		<foreach doc:name="For Each" doc:id="fe4ac5b1-f5bb-4ba6-817c-fc1d73d612e0" batchSize="${db.insertBatchSize}">
+			<ee:transform doc:name="Transform Message" doc:id="a7d56325-cc40-445f-8f64-2906c5a0bcde">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id":record.Id,
+"ContactId":record.ContactId,
+"AccountId":record.AccountId,
+"ParentId":record.ParentId,
+"RootAssetId":record.RootAssetId,
+"Product2Id":record.Product2Id,
+"ProductCode":record.ProductCode,
+"IsCompetitorProduct":record.IsCompetitorProduct,
+"CreatedDate":record.CreatedDate,
+"CreatedById":record.CreatedById,
+"LastModifiedDate":record.LastModifiedDate,
+"LastModifiedById":record.LastModifiedById,
+"SystemModstamp":record.SystemModstamp,
+"IsDeleted":record.IsDeleted,
+"CurrencyIsoCode":record.CurrencyIsoCode,
+"Name":record.Name,
+"SerialNumber":record.SerialNumber,
+"InstallDate":record.InstallDate,
+"PurchaseDate":record.PurchaseDate,
+"UsageEndDate":record.UsageEndDate,
+"LifecycleStartDate":record.LifecycleStartDate,
+"LifecycleEndDate":record.LifecycleEndDate,
+"Status":record.Status,
+"Price":record.Price,
+"Quantity":record.Quantity,
+"Description":record.Description,
+"OwnerId":record.OwnerId,
+"AssetProvidedById":record.AssetProvidedById,
+"AssetServicedById":record.AssetServicedById,
+"IsInternal":record.IsInternal,
+"AssetLevel":record.AssetLevel,
+"StockKeepingUnit":record.StockKeepingUnit,
+"HasLifecycleManagement":record.HasLifecycleManagement,
+"CurrentMrr":record.CurrentMrr,
+"CurrentLifecycleEndDate":record.CurrentLifecycleEndDate,
+"CurrentQuantity":record.CurrentQuantity,
+"CurrentAmount":record.CurrentAmount,
+"TotalLifecycleAmount":record.TotalLifecycleAmount,
+"Street":record.Street,
+"City":record.City,
+"State":record.State,
+"PostalCode":record.PostalCode,
+"Country":record.Country,
+"StateCode":record.StateCode,
+"CountryCode":record.CountryCode,
+"Latitude":record.Latitude,
+"Longitude":record.Longitude,
+"GeocodeAccuracy":record.GeocodeAccuracy,
+//"Address":record.Address,
+"LastViewedDate":record.LastViewedDate,
+"LastReferencedDate":record.LastReferencedDate,
+"SBQQ__AdditionalDiscountAmount__c":record.SBQQ__AdditionalDiscountAmount__c,
+"SBQQ__BillingFrequency__c":record.SBQQ__BillingFrequency__c,
+"SBQQ__BillingType__c":record.SBQQ__BillingType__c,
+"SBQQ__Bundle__c":record.SBQQ__Bundle__c,
+"SBQQ__BundledQuantity__c":record.SBQQ__BundledQuantity__c,
+"SBQQ__Bundled__c":record.SBQQ__Bundled__c,
+"SBQQ__ChargeType__c":record.SBQQ__ChargeType__c,
+"SBQQ__CombineKey__c":record.SBQQ__CombineKey__c,
+"SBQQ__ComponentDiscountedByPackage__c":record.SBQQ__ComponentDiscountedByPackage__c,
+"SBQQ__CurrentSubscription__c":record.SBQQ__CurrentSubscription__c,
+"SBQQ__DiscountScheduleType__c":record.SBQQ__DiscountScheduleType__c,
+"SBQQ__DiscountSchedule__c":record.SBQQ__DiscountSchedule__c,
+"SBQQ__Discount__c":record.SBQQ__Discount__c,
+"SBQQ__DistributorDiscount__c":record.SBQQ__DistributorDiscount__c,
+"SBQQ__DynamicOptionId__c":record.SBQQ__DynamicOptionId__c,
+"SBQQ__FromServiceCloud__c":record.SBQQ__FromServiceCloud__c,
+"SBQQ__LatestQuoteLine__c":record.SBQQ__LatestQuoteLine__c,
+"SBQQ__ListPrice__c":record.SBQQ__ListPrice__c,
+"SBQQ__MarkupAmount__c":record.SBQQ__MarkupAmount__c,
+"SBQQ__MarkupRate__c":record.SBQQ__MarkupRate__c,
+"SBQQ__Number__c":record.SBQQ__Number__c,
+"SBQQ__OptionDiscountAmount__c":record.SBQQ__OptionDiscountAmount__c,
+"SBQQ__OptionDiscount__c":record.SBQQ__OptionDiscount__c,
+"SBQQ__OptionLevel__c":record.SBQQ__OptionLevel__c,
+"SBQQ__OptionType__c":record.SBQQ__OptionType__c,
+"SBQQ__OrderProduct__c":record.SBQQ__OrderProduct__c,
+"SBQQ__OriginalUnitCost__c":record.SBQQ__OriginalUnitCost__c,
+"SBQQ__PackageProductCode__c":record.SBQQ__PackageProductCode__c,
+"SBQQ__PackageProductDescription__c":record.SBQQ__PackageProductDescription__c,
+"SBQQ__PartnerDiscount__c":record.SBQQ__PartnerDiscount__c,
+"SBQQ__PriceDimension__c":record.SBQQ__PriceDimension__c,
+"SBQQ__PricingMethod__c":record.SBQQ__PricingMethod__c,
+"SBQQ__ProductOption__c":record.SBQQ__ProductOption__c,
+"SBQQ__QuoteLine__c":record.SBQQ__QuoteLine__c,
+"SBQQ__RegularPrice__c":record.SBQQ__RegularPrice__c,
+"SBQQ__RenewalUpliftRate__c":record.SBQQ__RenewalUpliftRate__c,
+"SBQQ__RequiredByAsset__c":record.SBQQ__RequiredByAsset__c,
+"SBQQ__RequiredById__c":record.SBQQ__RequiredById__c,
+"SBQQ__RequiredByProduct__c":record.SBQQ__RequiredByProduct__c,
+"SBQQ__RequiredBySubscription__c":record.SBQQ__RequiredBySubscription__c,
+"SBQQ__RevisedAsset__c":record.SBQQ__RevisedAsset__c,
+"SBQQ__RootAsset__c":record.SBQQ__RootAsset__c,
+"SBQQ__RootId__c":record.SBQQ__RootId__c,
+"SBQQ__SegmentIndex__c":record.SBQQ__SegmentIndex__c,
+"SBQQ__SegmentKey__c":record.SBQQ__SegmentKey__c,
+"SBQQ__SegmentLabel__c":record.SBQQ__SegmentLabel__c,
+"SBQQ__SubscriptionEndDate__c":record.SBQQ__SubscriptionEndDate__c,
+"SBQQ__SubscriptionQuoteLine__c":record.SBQQ__SubscriptionQuoteLine__c,
+"SBQQ__SubscriptionStartDate__c":record.SBQQ__SubscriptionStartDate__c,
+"SBQQ__Subscription__c":record.SBQQ__Subscription__c,
+"SBQQ__TermDiscountSchedule__c":record.SBQQ__TermDiscountSchedule__c,
+"SBQQ__UnitCost__c":record.SBQQ__UnitCost__c,
+"SBQQ__VirtualAsset__c":record.SBQQ__VirtualAsset__c,
+"SBQQ__CreditProductId__c":record.SBQQ__CreditProductId__c,
+"SBQQ__Dimension__c":record.SBQQ__Dimension__c,
+"AVA_SFCPQ__SalesTaxAmount__c":record.AVA_SFCPQ__SalesTaxAmount__c,
+"Description1__c":record.Description1__c,
+"Format__c":record.Format__c,
+"Grade__c":record.Grade__c,
+"Language__c":record.Language__c,
+"Location__c":record.Location__c,
+"Standards__c":record.Standards__c,
+"Site__c":record.Site__c,
+"One_Time_Discount__c":record.One_Time_Discount__c,
+"Project_Configuration__c":record.Project_Configuration__c,
+"SF_NS_ID__c":record.SF_NS_ID__c,
+"Net_Total__c":record.Net_Total__c,
+"Data_Migration_Legacy_Id__c":record.Data_Migration_Legacy_Id__c
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			<flow-ref doc:name="insert-to-database-subFlow" doc:id="c05454d2-7bdb-4f0b-bff6-419e21f011c3" name="insert-to-database-subFlow" />
+			<logger level="INFO" doc:name="Logger" doc:id="9c2bbc86-2b82-49f2-92f1-a198cb6bc2b1" message="Insert in Database completed for batch #[vars.counter]"/>
+		</foreach>
+	</sub-flow>
+	<sub-flow name="parentorder-loadtodb-subflow" doc:id="6fc1f002-e464-45ae-bd0c-af4856e75aa1" >
+		<ee:transform doc:name="ParentOrder" doc:id="0255fe8b-7987-4189-872c-1f48da16d320" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById, Account_ID__c, Is_Order_Booking_Email_Sent__c, Is_Primary_Parent_Order__c, NetSuite_Sales_Order_ID__c, Opportunity__c, Quote__c, Status__c, NS_Sales_Order_No__c from Parent_Order__c"]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="tableName" ><![CDATA["[" ++ p('db.schema') ++ "].[SF_Parent_Order]"]]></ee:set-variable>
+				<ee:set-variable variableName="values" ><![CDATA["(:Id, :CreatedDate, :CreatedById, :LastModifiedDate, :LastModifiedById, :Account_ID__c, :Is_Order_Booking_Email_Sent__c, :Is_Primary_Parent_Order__c, :NetSuite_Sales_Order_ID__c, :Opportunity__c, :Quote__c, :Status__c, :NS_Sales_Order_No__c)"]]></ee:set-variable>
+				<ee:set-variable variableName="columns" ><![CDATA[["Id","CreatedDate","CreatedById","LastModifiedDate","LastModifiedById","Account_ID__c","Is_Order_Booking_Email_Sent__c","Is_Primary_Parent_Order__c","NetSuite_Sales_Order_ID__c","Opportunity__c","Quote__c","Status__c","NS_Sales_Order_No__c"]]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="072d53b4-7be6-4977-b8d5-e56a343d5bb5" name="query-in-salesforce-subFlow" />
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="9232653c-caea-4a6a-8ed0-b8274062deaa" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="c46b6c0a-84b6-4ac1-8d2b-3ee40f93b0fb" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id":record.Id,
+"CreatedDate":record.CreatedDate,
+"CreatedById":record.CreatedById,
+"LastModifiedDate":record.LastModifiedDate,
+"LastModifiedById":record.LastModifiedById,
+"Account_ID__c":record.Account_ID__c,
+"Is_Order_Booking_Email_Sent__c":record.Is_Order_Booking_Email_Sent__c,
+"Is_Primary_Parent_Order__c":record.Is_Primary_Parent_Order__c,
+"NetSuite_Sales_Order_ID__c":record.NetSuite_Sales_Order_ID__c,
+"Opportunity__c":record.Opportunity__c,
+"Quote__c":record.Quote__c,
+"Status__c":record.Status__c,
+"NS_Sales_Order_No__c":record.NS_Sales_Order_No__c
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="ae9a93d6-237c-4e47-a1f4-244fa6257bf5" name="insert-to-database-subFlow"/>
+	</sub-flow>
+	<sub-flow name="quoteLine-Recon-loadtodb-subflow" doc:id="5543e0f4-a812-4fc8-8e01-265dd36eda19" >
+		<ee:transform doc:name="QuoteLine Reconciliation" doc:id="f41e5ff6-140d-454a-95b6-ce41491a350e">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, Data_Migration_LegacyId__c, SBQQ__SpecialPrice__c, SBQQ__ListPrice__c, SBQQ__ProratedListPrice__c, SBQQ__ProrateMultiplier__c, SBQQ__RegularPrice__c, SBQQ__CustomerPrice__c, SBQQ__NetPrice__c, SBQQ__Quantity__c, SBQQ__Quote__c, SBQQ__NetTotal__c from SBQQ__QuoteLine__c"]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="tableName" ><![CDATA["[" ++ p('db.schema') ++ "].[SF_Quoteline_Recon]"]]></ee:set-variable>
+				<ee:set-variable variableName="values" ><![CDATA["(:Id,:Data_Migration_LegacyId__c,:SBQQ__SpecialPrice__c,:SBQQ__ListPrice__c,:SBQQ__ProratedListPrice__c,:SBQQ__ProrateMultiplier__c,:SBQQ__RegularPrice__c,:SBQQ__CustomerPrice__c,:SBQQ__NetPrice__c,:SBQQ__Quantity__c,:SBQQ__Quote__c,:SBQQ__NetTotal__c)"]]></ee:set-variable>
+				<ee:set-variable variableName="columns" ><![CDATA[["Id","Data_Migration_LegacyId__c","SBQQ__SpecialPrice__c","SBQQ__ListPrice__c","SBQQ__ProratedListPrice__c","SBQQ__ProrateMultiplier__c","SBQQ__RegularPrice__c","SBQQ__CustomerPrice__c","SBQQ__NetPrice__c","SBQQ__Quantity__c","SBQQ__Quote__c","SBQQ__NetTotal__c"]]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="20230a8e-1ea1-49ce-8b3b-741f5f61e30d" name="query-in-salesforce-subFlow"/>
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="6da2c641-d851-455b-bb35-fe69ed60922e" name="truncate-table-in-database-subFlow"/>
+		<foreach doc:name="For Each" doc:id="fd42ed2c-bcff-49be-80ff-8805ccc9a36d" batchSize="${db.insertBatchSize}">
+			<ee:transform doc:name="Transform Message" doc:id="200c9dfd-b93b-4dc3-a267-60c5c0322561" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id":record.Id,
+"Data_Migration_LegacyId__c":record.Data_Migration_LegacyId__c,
+"SBQQ__SpecialPrice__c":record.SBQQ__SpecialPrice__c,
+"SBQQ__ListPrice__c":record.SBQQ__ListPrice__c,
+"SBQQ__ProratedListPrice__c":record.SBQQ__ProratedListPrice__c,
+"SBQQ__ProrateMultiplier__c":record.SBQQ__ProrateMultiplier__c,
+"SBQQ__RegularPrice__c":record.SBQQ__RegularPrice__c,
+"SBQQ__CustomerPrice__c":record.SBQQ__CustomerPrice__c,
+"SBQQ__NetPrice__c":record.SBQQ__NetPrice__c,
+"SBQQ__Quantity__c":record.SBQQ__Quantity__c,
+"SBQQ__Quote__c":record.SBQQ__Quote__c,
+"SBQQ__NetTotal__c":record.SBQQ__NetTotal__c
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="insert-to-database-subFlow" doc:id="bb07cc21-4c70-4b22-962a-858eff0e4ca7" name="insert-to-database-subFlow"/>
+			<logger level="INFO" doc:name="Logger" doc:id="302038c1-48e2-4e6d-b193-3a0dd12f32ed" message="Insert in Database completed for batch #[vars.counter]"/>
+		</foreach>
+	</sub-flow>
+</mule>

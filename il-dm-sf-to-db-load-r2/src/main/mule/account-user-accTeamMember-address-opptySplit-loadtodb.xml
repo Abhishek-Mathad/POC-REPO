@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<flow name="accounts-loadtodb" doc:id="b285a313-0efb-4fa0-a932-ac5a99b30c44">
+		<scheduler doc:name="Scheduler" doc:id="893110cb-f56f-4a55-9574-c74271e221a1" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="f13ef2df-9c6e-40c4-b997-215ffc135dd9" message="Started only Account Load Flow"/>
+		<flow-ref doc:name="account-load-to-database-subflow" doc:id="c68f0816-d81e-49fa-b34d-c921226fb931" name="account-load-to-database-subflow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="c1e293c3-e5bb-44f5-998a-11a6b5a8321e" message="Completed only Account Load Flow"/>
+	</flow>
+	<flow name="users-loadtodb" doc:id="1921e2eb-e85f-4271-8174-9df7aeda86b5">
+		<scheduler doc:name="Scheduler" doc:id="bdb90d5c-fe4e-4d65-9ba5-abb36c910ec0" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100"/>
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="3b3674ba-1311-4c14-a826-b4f969e4b134" message="Started Account-Users Load flow"/>
+		<flow-ref doc:name="user-load-to-database-subflow" doc:id="de6a2722-26b5-4b64-a428-99556f79a3cb" name="user-load-to-database-subflow" />
+		<logger level="INFO" doc:name="Logger" doc:id="99c001ca-91d8-4b2b-a9c0-faef882e1111" message="Completed Account-Users Load flow"/>
+	</flow>
+	<flow name="accountTeamMember-loadtodb-P2" doc:id="a4740098-cb49-4538-bac5-501266c6e7da" >
+		<scheduler doc:name="Scheduler" doc:id="3541187c-f7bd-460c-a99e-faf7ce867c8d" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100"/>
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="f25e0b7d-8026-4614-81ad-75100d608d29" message="Started AccountTeamMember P2 Flow" />
+		<flow-ref doc:name="accountTeamMember-oppty-load-to-database-subflow" doc:id="c8ba9af3-310f-4f5a-ba74-e768f1595764" name="accountTeamMember-oppty-load-to-database-subflow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="ab0cbd02-ccfa-4bfc-89fb-4827a30365ac" message="Completed  AccountTeamMember P2 Flow" />
+	</flow>
+	<flow name="accountTeamMember-loadtodb-P1" doc:id="1dc57866-d7f9-4774-aba2-0ca9694387ee" >
+		<scheduler doc:name="Scheduler" doc:id="defab85a-b068-4e25-91b8-edb8d2444fc0" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="a9f37910-941c-40dd-a8b4-b185cb646a6b" message="Started AccountTeamMember P1 Flow" />
+		<flow-ref doc:name="accountTeamMember-load-to-database-subflow" doc:id="2ed98db8-5e15-49ed-9916-c6d94e0f40de" name="accountTeamMember-load-to-database-subflow" />
+		<logger level="INFO" doc:name="Logger" doc:id="4fd87173-da81-43b3-88eb-8b098c8959f8" message="Completed AccountTeamMember P1 Flow" />
+	</flow>
+	<flow name="opportunitySplit-loadtodb" doc:id="59c710ff-d720-46e8-ae80-fe7d3f1e92ac" >
+		<scheduler doc:name="Scheduler" doc:id="1de291d3-fbfe-41b4-b6af-68bc10a9ef2f" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="32bc39bf-1430-4dfb-ae46-554ab174fcd4" message="Started OpportunitySplit Flow"/>
+		<flow-ref doc:name="opportunitySplit-load-to-database-subflow" doc:id="ffdee488-4e83-4ad8-ba1f-d0374a979344" name="opportunitySplit-load-to-database-subflow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="3bf9c36a-88b3-4ce3-adff-d3b0b18e7058" message="Completed OpportunitySplit Flow"/>
+	</flow>
+	<flow name="address-loadtodb" doc:id="a3c06249-abc7-4156-a7fd-98e04a85e243" >
+		<scheduler doc:name="Scheduler" doc:id="0c5ce6b7-42ce-4ff4-a8e5-d6a03439442e" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="d5422068-85b0-4d3c-bca0-eac20988a2d7" message="Started Address Flow"/>
+		<flow-ref doc:name="address-load-to-database-subflow" doc:id="7fc6f136-aa25-4817-b7fc-2efb969a441d" name="address-load-to-database-subflow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="1c1f0f2a-4e6a-4414-9fdb-e848e82ba872" message="Completed Address Flow"/>
+	</flow>
+	<sub-flow name="user-load-to-database-subflow" doc:id="ee7250bf-4721-49b9-bbda-0c684fbd25a8">
+		<ee:transform doc:name="User" doc:id="1a82d5af-2311-4e68-b882-5bd962128fba">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+"select User_Legacy_ExternalId__c, Id, Sales_Region__c,Name, IsActive, Email from User"]]></ee:set-payload>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="tableName"><![CDATA["["  ++ p('db.schema') ++ "].[SF_User]"]]></ee:set-variable>
+						<ee:set-variable variableName="values"><![CDATA["(:User_Legacy_ExternalId__c,:Sales_Region__c,:Id,:Name,:IsActive,:Email)"]]></ee:set-variable>
+						<ee:set-variable variableName="columns"><![CDATA[["User_Legacy_ExternalId__c","Sales_Region__c","Id","Name","IsActive","Email"]]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="f53270b6-3289-4e80-b024-9847c5899d43" name="query-in-salesforce-subFlow" />
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="e814da1f-eccb-44dc-b448-a6cb9f091cdc" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="5968ecd4-dfaa-4c4c-8762-dbccc70b65de">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"User_Legacy_ExternalId__c": record.User_Legacy_ExternalId__c,
+"Sales_Region__c": record.Sales_Region__c,
+"Id":record.Id,
+"Name":record.Name,
+"IsActive":record.IsActive,
+"Email":record.Email
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="5a01a4d8-253b-43ff-b1cc-4aa0e5f72cf9" name="insert-to-database-subFlow" />
+	
+
+</sub-flow>
+<sub-flow name="account-load-to-database-subflow" doc:id="ad3dee58-d8e9-465a-aa21-e54aa8e6dae7" >
+		<ee:transform doc:name="Account" doc:id="59149caa-ac20-43a3-b201-30c9a38746b2">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, Account_Legacy_ExternalId__c, AccountNumber, Sales_Region__c, PD_Regional_Director_Core_ILC__c, Name, District_Enrollment_Size__c, Account_Category__c, BillingStateCode, OwnerId, Type, Account_Status__c from Account"]]></ee:set-payload>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="tableName"><![CDATA["[" ++ p('db.schema') ++ "].[SF_Account]"]]></ee:set-variable>
+						<ee:set-variable variableName="values"><![CDATA["(:Account_Legacy_ExternalId__c,:AccountNumber,:Id,:Sales_Region__c,:PD_Regional_Director_Core_ILC__c,:Name,:District_Enrollment_Size__c,:Account_Category__c,:BillingStateCode,:OwnerId,:Type,:Account_Status__c)"]]></ee:set-variable>
+						<ee:set-variable variableName="columns"><![CDATA[["Account_Legacy_ExternalId__c","AccountNumber","Id","Sales_Region__c","PD_Regional_Director_Core_ILC__c","Name","District_Enrollment_Size__c","Account_Category__c","BillingStateCode","OwnerId","Type","Account_Status__c"]]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="ca1c6ede-611d-41bc-b2b1-a7d25ece0cdb" name="query-in-salesforce-subFlow" />
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="5d18386e-7ad8-4fc8-8950-5565d010e499" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="45e61f8b-91a9-4be1-a987-00de992ba2f4">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Account_Legacy_ExternalId__c": record.Account_Legacy_ExternalId__c,
+"AccountNumber": record.AccountNumber,
+"Id":record.Id,
+"Sales_Region__c":record.Sales_Region__c,
+"PD_Regional_Director_Core_ILC__c":record.PD_Regional_Director_Core_ILC__c,
+"Name":record.Name,
+"District_Enrollment_Size__c":record.District_Enrollment_Size__c,
+"Account_Category__c":record.Account_Category__c,
+"BillingStateCode":record.BillingStateCode,
+"OwnerId":record.OwnerId,
+"Type":record.Type,
+"Account_Status__c":record.Account_Status__c
+}
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="d91671b0-bd99-4a48-9e05-0a4a1f7e3576" name="insert-to-database-subFlow" />
+	</sub-flow>
+	<sub-flow name="address-load-to-database-subflow" doc:id="adab81ec-1866-4f77-a3f8-a05ac818f9f6" >
+		<ee:transform doc:name="Address" doc:id="de6d4906-92d5-4de4-a1f5-e486e86cecfb" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, Address_Legacy_ExternalId__c, Account__c, Primary_Billing_Address__c, Primary_Shipping_Address__c, City__c, Country__c, Name, Zip__c, State__c, Street__c, Address_line_1__c from Address__c where Primary_Billing_Address__c = true or Primary_Shipping_Address__c = true"]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="tableName" ><![CDATA["[" ++ p('db.schema') ++ "].[SF_Address]"]]></ee:set-variable>
+				<ee:set-variable variableName="values" ><![CDATA["(:Id,:Address_Legacy_ExternalId__c,:Account__c,:Primary_Billing_Address__c,:Primary_Shipping_Address__c,:City__c,:Country__c,:Name,:Zip__c,:State__c,:Street__c,:Address_line_1__c)"]]></ee:set-variable>
+				<ee:set-variable variableName="columns" ><![CDATA[["Id","Address_Legacy_ExternalId__c","Account__c","Primary_Billing_Address__c","Primary_Shipping_Address__c","City__c","Country__c","Name","Zip__c","State__c","Street__c","Address_line_1__c"]]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="6403215b-6c6c-44a0-bd8b-6c5edd5b1227" name="query-in-salesforce-subFlow"/>
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="bb2f65e8-1d6b-4953-a859-aa67fd58b51b" name="truncate-table-in-database-subFlow"/>
+		<foreach doc:name="For Each" doc:id="6e328188-30b0-4c91-8836-1673f6927ce0" batchSize="${db.insertBatchSize}">
+			<ee:transform doc:name="Transform Message" doc:id="6f82bc77-e621-4f00-9d1d-c47a6108a64e">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id":record.Id,
+"Address_Legacy_ExternalId__c":record.Address_Legacy_ExternalId__c,
+"Account__c":record.Account__c,
+"Primary_Billing_Address__c":record.Primary_Billing_Address__c,
+"Primary_Shipping_Address__c":record.Primary_Shipping_Address__c,
+"City__c":record.City__c,
+"Country__c":record.Country__c,
+"Name":record.Name,
+"Zip__c":record.Zip__c,
+"State__c":record.State__c,
+"Street__c":record.Street__c,
+"Address_line_1__c":record.Address_line_1__c,	
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			<flow-ref doc:name="insert-to-database-subFlow" doc:id="6f5fa22d-6b6f-49ea-a1c6-bd98646b9c4c" name="insert-to-database-subFlow" />
+			<logger level="INFO" doc:name="Logger" doc:id="62c25cc1-f66e-44ae-ab76-d0089dbddd68" message="Insert in Database completed for batch #[vars.counter]"/>
+		</foreach>
+	</sub-flow>
+	<sub-flow name="accountTeamMember-load-to-database-subflow" doc:id="4fec9fd7-c2f7-4d0a-aea8-b9dd346fe792" >
+		<ee:transform doc:name="Transform Message" doc:id="fd51767a-769e-4acd-a83b-7a004e0751a8" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+p('db.atmQuery')
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<db:select doc:name="Select" doc:id="28e64026-f6f8-4b43-af88-356adf4e4491" config-ref="databaseConfig">
+			<db:sql ><![CDATA[#[payload]]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="c5dc48c4-66ca-43ed-acb2-cf6d38efa0fc" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="f5942cd3-db67-4529-9d5b-59572e4f8c0c" message="Size of records in DB for AccountTeamMember: #[sizeOf(payload)]"/>
+		<foreach doc:name="For Each" doc:id="557da8a4-864c-48d4-a478-3035fd035db4" batchSize="400" collection="#[payload]">
+			<logger level="INFO" doc:name="Logger" doc:id="dadb7c36-a660-4791-ba98-4f54abfa30f9" message="AccountTeamMember counter #[vars.counter]"/>
+			<ee:transform doc:name="Transform Message" doc:id="e809f1d5-9597-4b33-95f8-17145e41e641">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+var query = "select Id, AccountId, UserId,User.User_Legacy_ExternalId__c,Account.Account_Legacy_ExternalId__c, TeamMemberRole,Title, IsDeleted,AccountTeamMember_Legacy_ExternalId__c,CurrencyIsoCode,User.Name,PhotoUrl,OpportunityAccessLevel from AccountTeamMember where AccountTeamMember_Legacy_ExternalId__c in ("
+var values = (payload map ((item) -> "'" ++ item.AccountTeamMember_Legacy_ExternalId__c ++ "'")) joinBy ", "
+---
+query ++ values ++ ")"]]></ee:set-payload>
+			</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="tableName" ><![CDATA["[" ++ p('db.schema') ++ "].[SF_AccountTeamMember]"]]></ee:set-variable>
+					<ee:set-variable variableName="values" ><![CDATA["(:Id,:AccountId,:UserId,:User_Legacy_ExternalId__c,:Account_Legacy_ExternalId__c,:TeamMemberRole,:Title,:AccountTeamMember_Legacy_ExternalId__c,:IsDeleted,:CurrencyIsoCode,:UserName,:PhotoUrl,:OpportunityAccessLevel)"]]></ee:set-variable>
+					<ee:set-variable variableName="columns" ><![CDATA[["Id","AccountId","UserId","User_Legacy_ExternalId__c","Account_Legacy_ExternalId__c","TeamMemberRole","Title","AccountTeamMember_Legacy_ExternalId__c","IsDeleted","CurrencyIsoCode","UserName","PhotoUrl","OpportunityAccessLevel"]]]></ee:set-variable>
+				</ee:variables>
+		</ee:transform>
+			<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="607e5640-3067-4dbe-a9bb-12bbc4138dd8" name="query-in-salesforce-subFlow" />
+			<logger level="INFO" doc:name="Logger" doc:id="17a3edf1-d465-492b-8eb5-35da6dda43cd" message="Size of records in Salesforce for AccountTeamMember: #[sizeOf(payload)] for Counter #[vars.counter]"/>
+			<ee:transform doc:name="Transform Message" doc:id="3070215c-e35c-49ad-959b-58108d3caa19">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id": record.Id,
+"AccountId": record.AccountId,
+"UserId":record.UserId,
+"User_Legacy_ExternalId__c": record.User.User_Legacy_ExternalId__c,
+"Account_Legacy_ExternalId__c":record.Account.Account_Legacy_ExternalId__c,
+"TeamMemberRole": record.TeamMemberRole,
+"Title":record.Title,
+"AccountTeamMember_Legacy_ExternalId__c": record.AccountTeamMember_Legacy_ExternalId__c,
+"IsDeleted":record.IsDeleted,
+"CurrencyIsoCode":record.CurrencyIsoCode,
+"UserName":record.User.Name,
+"PhotoUrl":record.PhotoUrl,
+"OpportunityAccessLevel":record.OpportunityAccessLevel
+}
+]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="insert-to-database-subFlow" doc:id="f2fec4e0-0d44-43bb-b37b-4c97e9e7149a" name="insert-to-database-subFlow" />
+		</foreach>
+	</sub-flow>
+	<sub-flow name="accountTeamMember-oppty-load-to-database-subflow" doc:id="36376174-eec1-4856-a7fd-d84b59712f28" >
+		<ee:transform doc:name="Account Team Member" doc:id="0d675093-d703-44b8-8e3c-c538e115f68c">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+p('db.atmSFQuery')
+]]></ee:set-payload>
+			</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="tableName" ><![CDATA["[" ++ p('db.schema') ++ "].[SF_AccountTeamMember]"]]></ee:set-variable>
+					<ee:set-variable variableName="values" ><![CDATA["(:Id,:AccountId,:UserId,:User_Legacy_ExternalId__c,:Account_Legacy_ExternalId__c,:TeamMemberRole,:Title,:AccountTeamMember_Legacy_ExternalId__c,:IsDeleted,:CurrencyIsoCode,:UserName,:PhotoUrl,:OpportunityAccessLevel,:User_Profile_Name)"]]></ee:set-variable>
+					<ee:set-variable variableName="columns" ><![CDATA[["Id","AccountId","UserId","User_Legacy_ExternalId__c","Account_Legacy_ExternalId__c","TeamMemberRole","Title","AccountTeamMember_Legacy_ExternalId__c","IsDeleted","CurrencyIsoCode","UserName","PhotoUrl","OpportunityAccessLevel","User_Profile_Name"]]]></ee:set-variable>
+				</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="e95eac7b-d13c-4c31-9a8f-07bef634bcb5" name="query-in-salesforce-subFlow"/>
+		<foreach doc:name="For Each" doc:id="11c166cc-7f22-40ba-bb81-47d7ee046100" batchSize="${db.insertBatchSize}">
+			<ee:transform doc:name="Transform Message" doc:id="c22ede60-283f-4d38-8dfe-0590e5b82244" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id": record.Id,
+"AccountId": record.AccountId,
+"UserId":record.UserId,
+"User_Legacy_ExternalId__c": record.User.User_Legacy_ExternalId__c,
+"Account_Legacy_ExternalId__c":record.Account.Account_Legacy_ExternalId__c,
+"TeamMemberRole": record.TeamMemberRole,
+"Title":record.Title,
+"AccountTeamMember_Legacy_ExternalId__c": record.AccountTeamMember_Legacy_ExternalId__c,
+"IsDeleted":record.IsDeleted,
+"CurrencyIsoCode":record.CurrencyIsoCode,
+"UserName":record.User.Name,
+"PhotoUrl":record.PhotoUrl,
+"OpportunityAccessLevel":record.OpportunityAccessLevel,
+"User_Profile_Name":record.User.Profile.Name
+}
+]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="insert-to-database-subFlow" doc:id="472f853a-aa46-48d7-80b0-104f2e95fa73" name="insert-to-database-subFlow"/>
+			<logger level="INFO" doc:name="Logger" doc:id="d6f68ce2-f6d1-4305-bc0c-6fb647a8ecc2" message="Insert in Database completed for batch #[vars.counter]"/>
+		</foreach>
+	</sub-flow>
+	<sub-flow name="opportunitySplit-load-to-database-subflow" doc:id="1c05f57b-64d7-4985-9ca2-1a8fe033ee3a" >
+		<ee:transform doc:name="OpportunitySplit" doc:id="9a3027e1-da0b-4170-9cac-26a2eed99579" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, Data_Migration_Legacy_ID__c, OpportunityId, Opportunity.Data_Migration_Legacy_ID__c, Opportunity.OwnerId, Opportunity.Owner.User_Legacy_ExternalId__c, SplitOwnerId, SplitOwner.User_Legacy_ExternalId__c, SplitPercentage, CreatedDate, LastModifiedDate from OpportunitySplit"]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="tableName" ><![CDATA["[" ++ p('db.schema') ++ "].[sf_opportunitySplit]"]]></ee:set-variable>
+				<ee:set-variable variableName="values" ><![CDATA["(:OpportunitySplit_Id,:OpportunitySplit_Data_Migration_Legacy_ID_c,:Opportunity_Id,:Opportunity_Data_Migration_Legacy_ID_c,:Opportunity_OwnerId,:Opportunity_Owner_User_Legacy_ExternalId_c,:OpportunitySplit_SplitOwnerId,:OpportunitySplit_SplitOwner_User_Legacy_ExternalId_c,:OpportunitySplit_SplitPercentage,:OpportunitySplit_CreatedDate,:OpportunitySplit_LastModifiedDate)"]]></ee:set-variable>
+				<ee:set-variable variableName="columns" ><![CDATA[["OpportunitySplit_Id","OpportunitySplit_Data_Migration_Legacy_ID_c","Opportunity_Id","Opportunity_Data_Migration_Legacy_ID_c","Opportunity_OwnerId","Opportunity_Owner_User_Legacy_ExternalId_c","OpportunitySplit_SplitOwnerId","OpportunitySplit_SplitOwner_User_Legacy_ExternalId_c","OpportunitySplit_SplitPercentage","OpportunitySplit_CreatedDate","OpportunitySplit_LastModifiedDate"]]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="49f779b3-1f24-4774-897a-4f8f5b9c722d" name="query-in-salesforce-subFlow"/>
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="2aa08236-83f5-49a8-a2b0-f24c64f8e44e" name="truncate-table-in-database-subFlow"/>
+		<foreach doc:name="For Each" doc:id="ce77b455-ed6c-483f-9b4a-81e09e793bd3" batchSize="${db.insertBatchSize}">
+			<ee:transform doc:name="Transform Message" doc:id="77f179bb-083b-4f92-88bb-53f66ad600e3">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"OpportunitySplit_Id":record.Id,
+"OpportunitySplit_Data_Migration_Legacy_ID_c":record.Data_Migration_Legacy_ID__c,
+"Opportunity_Id":record.OpportunityId,
+"Opportunity_Data_Migration_Legacy_ID_c":record.Opportunity.Data_Migration_Legacy_ID__c,
+"Opportunity_OwnerId":record.Opportunity.OwnerId,
+"Opportunity_Owner_User_Legacy_ExternalId_c":record.Opportunity.Owner.User_Legacy_ExternalId__c,
+"OpportunitySplit_SplitOwnerId":record.SplitOwnerId,
+"OpportunitySplit_SplitOwner_User_Legacy_ExternalId_c":record.SplitOwner.User_Legacy_ExternalId__c,
+"OpportunitySplit_SplitPercentage":record.SplitPercentage,
+"OpportunitySplit_CreatedDate":record.CreatedDate,
+"OpportunitySplit_LastModifiedDate":record.LastModifiedDate
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			<flow-ref doc:name="insert-to-database-subFlow" doc:id="a1f131d1-64a3-4fad-a723-98bab3ff7537" name="insert-to-database-subFlow" />
+			<logger level="INFO" doc:name="Logger" doc:id="7ed042cb-341b-4bcd-a3f1-dcb37f76e291" message="Insert in Database completed for batch #[vars.counter]"/>
+		</foreach>
+	</sub-flow>
+	
+	
+</mule>

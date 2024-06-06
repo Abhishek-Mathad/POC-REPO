@@ -1,0 +1,9 @@
+%dw 2.0
+
+type auto_edd5b1aa_e1b6_4424_9a2d_441dabb1245f_Output_Variables_insertPayload = Array<{ _?: java_lang_Object }>
+type java_lang_Object = {|  |} {"typeAlias": "Object",
+"class": "java.lang.Object",
+"typeId": "java.lang.Object"}
+
+
+

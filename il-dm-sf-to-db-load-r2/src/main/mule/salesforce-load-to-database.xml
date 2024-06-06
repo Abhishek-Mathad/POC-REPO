@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	
+	
+	
+	<flow name="salesforce-load-to-database-all" doc:id="5f1892b6-32c4-4679-8d2f-9f9644cbf95b" >
+		<logger level="INFO" doc:name="Logger" doc:id="8f5494e2-dc7d-48f9-82f4-b636f0d2256e" message="Start of All Loads"/>
+		<flow-ref doc:name="Flow Reference" doc:id="bdd9ce4a-ba59-40b9-abd5-0e092bc9f02e" name="salesforce-load-to-database-subflow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="d1b87a16-82d6-4c9b-8ab9-4adf2cfd9682" message="End of All Loads"/>
+	</flow>
+	<flow name="salesforce-load-to-database-subflow" doc:id="6a13a0f1-4dd0-48dd-9d70-fda84fe40dc2" >
+		<logger level="INFO" doc:name="Logger" doc:id="4fa85b1a-953b-4459-86da-073aa2c11a13" message="Started Salesforce load to Database" />
+		<scatter-gather doc:name="Scatter-Gather" doc:id="beef0b48-a8e3-46a1-a9d4-f719459949f1" >
+			<route >
+				<flow-ref doc:name="recordType-load-to-databaseSub_Flow" doc:id="5c25e323-c734-4ce7-80de-acac6e32165d" name="recordType-load-to-database-subflow"/>
+			</route>
+			<route >
+				<flow-ref doc:name="discountTier-load-to-databaseSub_Flow" doc:id="f8f14760-f932-4aa3-a013-e3e7547ee6e4" name="discountTier-load-to-database-subflow"/>
+			</route>
+			<route >
+				<flow-ref doc:name="pricebookEntry-load-to-databaseSub_Flow" doc:id="b2c75775-ecac-4092-ae58-723d94b96564" name="pricebookEntry-load-to-database-subflow"/>
+			</route>
+			<route >
+				<flow-ref doc:name="pricebook-load-to-databaseSub_Flow" doc:id="4b6d73ae-488a-4b33-9dd0-b8aaadafebe3" name="pricebook-load-to-database-subflow"/>
+			</route>
+			<route >
+				<flow-ref doc:name="productOption-load-to-database-subflow" doc:id="2c438c3f-8ce5-46f3-8141-3278e61b6a65" name="productOption-load-to-database-subflow"/>
+			</route>
+			<route >
+				<flow-ref doc:name="product-load-to-database-subflow" doc:id="d14202ce-e3e4-4322-949b-26e853eff4c3" name="product-load-to-database-subflow"/>
+				</route>
+			<route >
+				<flow-ref doc:name="discountSchedule-load-to-databaseSub_Flow" doc:id="24600e2b-db9c-4202-b078-15f990481f37" name="discountSchedule-load-to-database-subflow"/>
+			</route>
+			<route >
+				<flow-ref doc:name="productfeature-load-to-databaseSub_Flow" doc:id="c1ab17ae-d97e-4e6e-a0bb-8d0870fc5adc" name="productfeature-load-to-database-subflow"/>
+			</route>
+			<route >
+				<flow-ref doc:name="user-load-to-database-subflow" doc:id="f1e05076-c124-4125-a796-ebfec64aa1e8" name="user-load-to-database-subflow"/>
+			</route>
+			<route >
+				<flow-ref doc:name="account-load-to-database-subflow" doc:id="6b5b9918-10a3-4f3e-8f32-9cab881a72b1" name="account-load-to-database-subflow"/>
+			</route>
+			<route >
+				<flow-ref doc:name="accountcontractedPrice-load-to-salesforce-subflow" doc:id="7ed9a6f1-147a-42c0-9ec4-f5864da4c866" name="accountcontractedPrice-load-to-salesforce-subflow"/>
+			</route>
+			<route >
+				<flow-ref doc:name="accountTeamMember-load-to-database-subflow" doc:id="a8ba4091-35d0-46fa-922d-8c5bfae01f00" name="accountTeamMember-load-to-database-subflow"/>
+			</route>
+			<route >
+				<flow-ref doc:name="configurationattribute-load-to-database-subflow" doc:id="0fe5e09d-9a35-4721-a223-5b29e5c75bf2" name="configurationattribute-load-to-database-subflow"/>
+			</route>
+			<route >
+				<flow-ref doc:name="price-and-netsuite-mapping-load-to-database-subflow" doc:id="62ac6c70-fe31-4ecd-87b0-1f06f49e5ef0" name="price-and-netsuite-mapping-load-to-database-subflow"/>
+			</route>
+		</scatter-gather>
+		<logger level="INFO" doc:name="Logger" doc:id="af4a3214-19a8-4f92-bc5c-3b24c89d1ad3" message="Completed loads for all the objects" />
+	</flow>
+
+	
+
+</mule>

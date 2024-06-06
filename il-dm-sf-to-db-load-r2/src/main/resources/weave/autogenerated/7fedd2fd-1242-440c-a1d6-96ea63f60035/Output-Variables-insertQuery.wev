@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_7fedd2fd_1242_440c_a1d6_96ea63f60035_Output_Variables_insertQuery = Any
+

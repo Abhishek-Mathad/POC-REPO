@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_bdd9c44d_68cf_4ec4_8018_7ed7bb5056fd_Output_Variables_columns = Array<"Id" | "OwnerId" | "IsDeleted" | "Name" | "CurrencyIsoCode" | "RecordTypeId" | "CreatedDate" | "CreatedById" | "LastModifiedDate" | "LastModifiedById" | "SystemModstamp" | "LastViewedDate" | "LastReferencedDate" | "Account__c" | "Contracted_Price__c" | "Effective_Date__c" | "Expiration_Date__c" | "Format__c" | "Grade__c" | "Is_Duplicate__c" | "Language__c" | "Location__c" | "Price_Contract_Source__c" | "Product_ID__c" | "Standards__c" | "Concatenate_Key__c" | "Non_Discountable__c" | "Term_Discount__c" | "Volume_Discount__c">
+

@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_5fbf05e0_9b7c_4a1e_904f_d67916ba367b_Output_Variables_columns = Array<"Id" | "IsDeleted" | "Name" | "CurrencyIsoCode" | "CreatedById" | "LastModifiedById" | "SystemModstamp" | "SBQQ__Schedule__c" | "SBQQ__DiscountAmount__c" | "SBQQ__Discount__c" | "SBQQ__LowerBound__c" | "SBQQ__Number__c" | "SBQQ__Price__c" | "SBQQ__UpperBound__c" | "CreatedDate" | "LastModifiedDate">
+

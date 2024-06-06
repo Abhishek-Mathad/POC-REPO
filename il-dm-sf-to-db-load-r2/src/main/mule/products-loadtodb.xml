@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<flow name="products-loadtodbFlow" doc:id="9cefba91-5faa-4d2e-bf0f-a245d33c43fd" >
+		<scheduler doc:name="Scheduler" doc:id="b32c95bb-9fca-4002-b51a-68a13fa21078" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="bd61a893-b325-4271-becf-fc754cefb251" message="Started Products Load"/>
+		<flow-ref doc:name="product-load-to-database-subflow" doc:id="2eb03280-0a14-47ff-9852-38497616a302" name="product-load-to-database-subflow" />
+		<logger level="INFO" doc:name="Logger" doc:id="63dab973-19cd-4d39-ac73-214ed6287bd1" message="Completed Products Load"/>
+	</flow>
+	<flow name="productOption-loadtodbFlow" doc:id="d06b2d14-5bd2-4c4f-a64d-cea9d9ea5bc1" >
+		<scheduler doc:name="Scheduler" doc:id="6cd0b7a6-5fca-4a3d-8cb8-80dc7793722f" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="2435c9f9-7b06-434f-b8ca-c91a3e33fccc" message="Started Product Option Load"/>
+		<flow-ref doc:name="productOption-load-to-database-subflow" doc:id="5123ae2c-8649-4a0b-99e9-bbc72214ad22" name="productOption-load-to-database-subflow" />
+		<logger level="INFO" doc:name="Logger" doc:id="e9463338-70ef-4f18-a8ef-6ba9ddaa0fb9" message="Completed Product Option Load"/>
+	</flow>
+	<flow name="productFeature-loadtodbFlow" doc:id="fa9504d3-5890-49b6-9d6a-dc6f66176854" >
+		<scheduler doc:name="Scheduler" doc:id="73610838-2bae-420f-9f63-2784b528e606" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="0ba62139-8db7-41fb-97c0-65bf83f59d45" message="Started Product Feature Load"/>
+		<flow-ref doc:name="productfeature-load-to-database-subflow" doc:id="c8716af8-95fc-4395-bdb8-95e42c69bc1a" name="productfeature-load-to-database-subflow" />
+		<logger level="INFO" doc:name="Logger" doc:id="f968b124-d410-4eb2-b6d6-c4f9b88f07c0" message="Completed Product Feature Load"/>
+	</flow>
+	<flow name="configurationAttribute-loadtodbFlow" doc:id="0bd65a04-6de1-4efc-a4a8-72189eff1f10" >
+		<scheduler doc:name="Scheduler" doc:id="b908bbe2-33fd-442b-9018-a4fa0a3feb3b" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="8456568d-a598-415d-9f8b-8e3283caf603" message="Started Configuration Attribute Load"/>
+		<flow-ref doc:name="configurationattribute-load-to-database-subflow" doc:id="d69efe24-0edf-4168-a017-3fa0617afcc2" name="configurationattribute-load-to-database-subflow" />
+		<logger level="INFO" doc:name="Logger" doc:id="a323ce64-840c-45a7-8f68-ad60443cc65b" message="Completed Configuration Attribute Load"/>
+	</flow>
+	<sub-flow name="product-load-to-database-subflow" doc:id="77fd4b7e-ea24-4b92-9cd5-3c8878da9db1">
+	<logger level="INFO" doc:name="Logger" doc:id="cae20698-af45-4216-b4e3-83aaa958b7aa" message="Started Product Load to Database"/>
+		<ee:transform doc:name="Product" doc:id="f733fe52-916f-428e-89f4-9fd3acc41157">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, Name, ProductCode, Description, IsActive, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById, SystemModstamp, Family, CurrencyIsoCode, RecordTypeId, ExternalDataSourceId, ExternalId, DisplayUrl, QuantityUnitOfMeasure, IsDeleted, IsArchived, LastViewedDate, LastReferencedDate, StockKeepingUnit, SBQQ__AssetAmendmentBehavior__c, SBQQ__AssetConversion__c, SBQQ__BatchQuantity__c, SBQQ__BillingFrequency__c, SBQQ__BillingType__c, SBQQ__BlockPricingField__c, SBQQ__ChargeType__c, SBQQ__Component__c, SBQQ__CompoundDiscountRate__c, SBQQ__ConfigurationFieldSet__c, SBQQ__ConfigurationFields__c, SBQQ__ConfigurationFormTitle__c, SBQQ__ConfigurationType__c, SBQQ__ConfigurationValidator__c, SBQQ__ConfiguredCodePattern__c, SBQQ__ConfiguredDescriptionPattern__c, SBQQ__CostEditable__c, SBQQ__CostSchedule__c, SBQQ__CustomConfigurationPage__c, SBQQ__CustomConfigurationRequired__c, SBQQ__CustomerCommunityAvailability__c, SBQQ__DefaultPricingTable__c, SBQQ__DefaultQuantity__c, SBQQ__DescriptionLocked__c, SBQQ__DiscountCategory__c, SBQQ__DiscountSchedule__c, SBQQ__DynamicPricingConstraint__c, SBQQ__EnableLargeConfiguration__c, SBQQ__ExcludeFromMaintenance__c, SBQQ__ExcludeFromOpportunity__c, SBQQ__ExternallyConfigurable__c, SBQQ__GenerateContractedPrice__c, SBQQ__HasConfigurationAttributes__c, SBQQ__HasConsumptionSchedule__c, SBQQ__Hidden__c, SBQQ__HidePriceInSearchResults__c, SBQQ__IncludeInMaintenance__c, SBQQ__NewQuoteGroup__c, SBQQ__NonDiscountable__c, SBQQ__NonPartnerDiscountable__c, SBQQ__OptionLayout__c, SBQQ__OptionSelectionMethod__c, SBQQ__Optional__c, SBQQ__PriceEditable__c, SBQQ__PricingGuidance__c, SBQQ__PricingMethodEditable__c, SBQQ__PricingMethod__c, SBQQ__ProductPictureID__c, SBQQ__QuantityEditable__c, SBQQ__QuantityScale__c, SBQQ__ReconfigurationDisabled__c, SBQQ__RenewalProduct__c, SBQQ__SortOrder__c, SBQQ__Specifications__c, SBQQ__SubscriptionBase__c, SBQQ__SubscriptionCategory__c, SBQQ__SubscriptionPercent__c, SBQQ__SubscriptionPricing__c, SBQQ__SubscriptionTarget__c, SBQQ__SubscriptionTerm__c, SBQQ__SubscriptionType__c, SBQQ__TaxCode__c, SBQQ__Taxable__c, SBQQ__TermDiscountLevel__c, SBQQ__TermDiscountSchedule__c, SBQQ__UpgradeCredit__c, SBQQ__UpgradeRatio__c, SBQQ__UpgradeSource__c, SBQQ__UpgradeTarget__c, SBQQ__ConfigurationEvent__c, AVA_SFCPQ__TaxCode__c, Attendance_Sensitivity_Threshold__c, Audience__c, Business_Segment__c, Configuration_Attributes_Allowed__c, DisableProration__c, End_of_Life_Date__c, End_of_Sale_Date__c, Go_Live_Date__c, Grade_Filter__c, Is_Consumable_Kit__c, Is_Email_Sent__c, Item_Type__c, Location_Filter__c, Maximum_Attendance_Allowed_per_Unit__c, Medium__c, PD_Applicable_Product_Family__c, PD_Provider__c, Package_Tier__c, Product_Type__c, Status__c, Subsidiary_Avatax__c, Subsidiary__c, Configuration_Attributes_Allowed_Formula__c, Sales_Availability__c, Status_Value_Legacy__c, Status_Value__c, Receives_Markup__c, NetSuite_CPQ_ID__c, UPC_Code__c, Acquisition_Company__c, Provisioning_Platform__c, Product_Family__c, Digital_Record_Type_Check__c, Product_RecordType_Name__c, Summer_School__c, Special_SS_Renewal__c from Product2"]]></ee:set-payload>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="tableName"><![CDATA["[" ++ p('db.schema') ++ "].[SF_Product]"]]></ee:set-variable>
+						<ee:set-variable variableName="values"><![CDATA["(:Id,:Name,:ProductCode,:Description,:IsActive,:CreatedById,:LastModifiedById,:SystemModstamp,:Family,:CurrencyIsoCode,:RecordTypeId,:ExternalDataSourceId,:ExternalId,:DisplayUrl,:QuantityUnitOfMeasure,:IsDeleted,:IsArchived,:StockKeepingUnit,:SBQQ__AssetAmendmentBehavior__c,:SBQQ__AssetConversion__c,:SBQQ__BatchQuantity__c,:SBQQ__BillingFrequency__c,:SBQQ__BillingType__c,:SBQQ__BlockPricingField__c,:SBQQ__ChargeType__c,:SBQQ__Component__c,:SBQQ__CompoundDiscountRate__c,:SBQQ__ConfigurationFieldSet__c,:SBQQ__ConfigurationFields__c,:SBQQ__ConfigurationFormTitle__c,:SBQQ__ConfigurationType__c,:SBQQ__ConfigurationValidator__c,:SBQQ__ConfiguredCodePattern__c,:SBQQ__ConfiguredDescriptionPattern__c,:SBQQ__CostEditable__c,:SBQQ__CostSchedule__c,:SBQQ__CustomConfigurationPage__c,:SBQQ__CustomConfigurationRequired__c,:SBQQ__CustomerCommunityAvailability__c,:SBQQ__DefaultPricingTable__c,:SBQQ__DefaultQuantity__c,:SBQQ__DescriptionLocked__c,:SBQQ__DiscountCategory__c,:SBQQ__DiscountSchedule__c,:SBQQ__DynamicPricingConstraint__c,:SBQQ__EnableLargeConfiguration__c,:SBQQ__ExcludeFromMaintenance__c,:SBQQ__ExcludeFromOpportunity__c,:SBQQ__ExternallyConfigurable__c,:SBQQ__GenerateContractedPrice__c,:SBQQ__HasConfigurationAttributes__c,:SBQQ__HasConsumptionSchedule__c,:SBQQ__Hidden__c,:SBQQ__HidePriceInSearchResults__c,:SBQQ__IncludeInMaintenance__c,:SBQQ__NewQuoteGroup__c,:SBQQ__NonDiscountable__c,:SBQQ__NonPartnerDiscountable__c,:SBQQ__OptionLayout__c,:SBQQ__OptionSelectionMethod__c,:SBQQ__Optional__c,:SBQQ__PriceEditable__c,:SBQQ__PricingGuidance__c,:SBQQ__PricingMethodEditable__c,:SBQQ__PricingMethod__c,:SBQQ__ProductPictureID__c,:SBQQ__QuantityEditable__c,:SBQQ__QuantityScale__c,:SBQQ__ReconfigurationDisabled__c,:SBQQ__RenewalProduct__c,:SBQQ__SortOrder__c,:SBQQ__Specifications__c,:SBQQ__SubscriptionBase__c,:SBQQ__SubscriptionCategory__c,:SBQQ__SubscriptionPercent__c,:SBQQ__SubscriptionPricing__c,:SBQQ__SubscriptionTarget__c,:SBQQ__SubscriptionTerm__c,:SBQQ__SubscriptionType__c,:SBQQ__TaxCode__c,:SBQQ__Taxable__c,:SBQQ__TermDiscountLevel__c,:SBQQ__TermDiscountSchedule__c,:SBQQ__UpgradeCredit__c,:SBQQ__UpgradeRatio__c,:SBQQ__UpgradeSource__c,:SBQQ__UpgradeTarget__c,:SBQQ__ConfigurationEvent__c,:AVA_SFCPQ__TaxCode__c,:Attendance_Sensitivity_Threshold__c,:Audience__c,:Business_Segment__c,:Configuration_Attributes_Allowed__c,:DisableProration__c,:Grade_Filter__c,:Is_Consumable_Kit__c,:Is_Email_Sent__c,:Item_Type__c,:Location_Filter__c,:Maximum_Attendance_Allowed_per_Unit__c,:Medium__c,:PD_Applicable_Product_Family__c,:PD_Provider__c,:Package_Tier__c,:Product_Type__c,:Status__c,:Subsidiary_Avatax__c,:Subsidiary__c,:Configuration_Attributes_Allowed_Formula__c,:Sales_Availability__c,:Status_Value_Legacy__c,:Status_Value__c,:Receives_Markup__c,:NetSuite_CPQ_ID__c,:UPC_Code__c,:Acquisition_Company__c,:Provisioning_Platform__c,:Product_Family__c,:Digital_Record_Type_Check__c,:Product_RecordType_Name__c,:CreatedDate,:LastModifiedDate,:LastViewedDate,:LastReferencedDate,:End_of_Life_Date__c,:End_of_Sale_Date__c,:Go_Live_Date__c,:Summer_School__c,:Special_SS_Renewal__c)"
+//:LastViewedDate,:LastReferencedDate,:End_of_Life_Date__c,:End_of_Sale_Date__c,:Go_Live_Date__c,]]></ee:set-variable>
+				<ee:set-variable variableName="columns" ><![CDATA[["Id","Name","ProductCode","Description","IsActive","CreatedById","LastModifiedById","SystemModstamp","Family","CurrencyIsoCode","RecordTypeId","ExternalDataSourceId","ExternalId","DisplayUrl","QuantityUnitOfMeasure","IsDeleted","IsArchived","StockKeepingUnit","SBQQ__AssetAmendmentBehavior__c","SBQQ__AssetConversion__c","SBQQ__BatchQuantity__c","SBQQ__BillingFrequency__c","SBQQ__BillingType__c","SBQQ__BlockPricingField__c","SBQQ__ChargeType__c","SBQQ__Component__c","SBQQ__CompoundDiscountRate__c","SBQQ__ConfigurationFieldSet__c","SBQQ__ConfigurationFields__c","SBQQ__ConfigurationFormTitle__c","SBQQ__ConfigurationType__c","SBQQ__ConfigurationValidator__c","SBQQ__ConfiguredCodePattern__c","SBQQ__ConfiguredDescriptionPattern__c","SBQQ__CostEditable__c","SBQQ__CostSchedule__c","SBQQ__CustomConfigurationPage__c","SBQQ__CustomConfigurationRequired__c","SBQQ__CustomerCommunityAvailability__c","SBQQ__DefaultPricingTable__c","SBQQ__DefaultQuantity__c","SBQQ__DescriptionLocked__c","SBQQ__DiscountCategory__c","SBQQ__DiscountSchedule__c","SBQQ__DynamicPricingConstraint__c","SBQQ__EnableLargeConfiguration__c","SBQQ__ExcludeFromMaintenance__c","SBQQ__ExcludeFromOpportunity__c","SBQQ__ExternallyConfigurable__c","SBQQ__GenerateContractedPrice__c","SBQQ__HasConfigurationAttributes__c","SBQQ__HasConsumptionSchedule__c","SBQQ__Hidden__c","SBQQ__HidePriceInSearchResults__c","SBQQ__IncludeInMaintenance__c","SBQQ__NewQuoteGroup__c","SBQQ__NonDiscountable__c","SBQQ__NonPartnerDiscountable__c","SBQQ__OptionLayout__c","SBQQ__OptionSelectionMethod__c","SBQQ__Optional__c","SBQQ__PriceEditable__c","SBQQ__PricingGuidance__c","SBQQ__PricingMethodEditable__c","SBQQ__PricingMethod__c","SBQQ__ProductPictureID__c","SBQQ__QuantityEditable__c","SBQQ__QuantityScale__c","SBQQ__ReconfigurationDisabled__c","SBQQ__RenewalProduct__c","SBQQ__SortOrder__c","SBQQ__Specifications__c","SBQQ__SubscriptionBase__c","SBQQ__SubscriptionCategory__c","SBQQ__SubscriptionPercent__c","SBQQ__SubscriptionPricing__c","SBQQ__SubscriptionTarget__c","SBQQ__SubscriptionTerm__c","SBQQ__SubscriptionType__c","SBQQ__TaxCode__c","SBQQ__Taxable__c","SBQQ__TermDiscountLevel__c","SBQQ__TermDiscountSchedule__c","SBQQ__UpgradeCredit__c","SBQQ__UpgradeRatio__c","SBQQ__UpgradeSource__c","SBQQ__UpgradeTarget__c","SBQQ__ConfigurationEvent__c","AVA_SFCPQ__TaxCode__c","Attendance_Sensitivity_Threshold__c","Audience__c","Business_Segment__c","Configuration_Attributes_Allowed__c","DisableProration__c","Grade_Filter__c","Is_Consumable_Kit__c","Is_Email_Sent__c","Item_Type__c","Location_Filter__c","Maximum_Attendance_Allowed_per_Unit__c","Medium__c","PD_Applicable_Product_Family__c","PD_Provider__c","Package_Tier__c","Product_Type__c","Status__c","Subsidiary_Avatax__c","Subsidiary__c","Configuration_Attributes_Allowed_Formula__c","Sales_Availability__c","Status_Value_Legacy__c","Status_Value__c","Receives_Markup__c","NetSuite_CPQ_ID__c","UPC_Code__c","Acquisition_Company__c","Provisioning_Platform__c","Product_Family__c","Digital_Record_Type_Check__c","Product_RecordType_Name__c","CreatedDate","LastModifiedDate","LastViewedDate","LastReferencedDate","End_of_Life_Date__c","End_of_Sale_Date__c","Go_Live_Date__c","Summer_School__c","Special_SS_Renewal__c"]
+
+//,"CreatedDate","LastModifiedDate","LastViewedDate","LastReferencedDate","End_of_Life_Date__c","End_of_Sale_Date__c","Go_Live_Date__c"]]]></ee:set-variable>
+					
+</ee:variables>
+				</ee:transform>
+				<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="e841a14a-96ce-4081-85a3-91eb0afb52e3" name="query-in-salesforce-subFlow" />
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="5e30167f-6df5-4c9e-b45e-5c2ae80cef75" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="55264d87-2bbe-40ea-ae5b-9b7fdc66ca5e">
+					<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+    "Id": record.Id,
+    "Name": record.Name,
+    "ProductCode": record.ProductCode,
+    "Description": record.Description,
+    "IsActive": record.IsActive,
+    "CreatedById": record.CreatedById,
+    "LastModifiedById": record.LastModifiedById,
+    "CreatedDate": record.CreatedDate,
+	"LastModifiedDate": record.LastModifiedDate,
+    "SystemModstamp": record.SystemModstamp,
+    "Family": record.Family,
+    "CurrencyIsoCode": record.CurrencyIsoCode,
+    "RecordTypeId": record.RecordTypeId,
+    "ExternalDataSourceId": record.ExternalDataSourceId,
+    "ExternalId": record.ExternalId,
+    "DisplayUrl": record.DisplayUrl,
+    "QuantityUnitOfMeasure": record.QuantityUnitOfMeasure,
+    "IsDeleted": record.IsDeleted,
+    "IsArchived": record.IsArchived,
+    "StockKeepingUnit": record.StockKeepingUnit,
+    "SBQQ__AssetAmendmentBehavior__c": record.SBQQ__AssetAmendmentBehavior__c,
+    "SBQQ__AssetConversion__c": record.SBQQ__AssetConversion__c,
+    "SBQQ__BatchQuantity__c": record.SBQQ__BatchQuantity__c,
+    "SBQQ__BillingFrequency__c": record.SBQQ__BillingFrequency__c,
+    "SBQQ__BillingType__c": record.SBQQ__BillingType__c,
+    "SBQQ__BlockPricingField__c": record.SBQQ__BlockPricingField__c,
+    "SBQQ__ChargeType__c": record.SBQQ__ChargeType__c,
+    "SBQQ__Component__c": record.SBQQ__Component__c,
+    "SBQQ__CompoundDiscountRate__c": record.SBQQ__CompoundDiscountRate__c,
+    "SBQQ__ConfigurationFieldSet__c": record.SBQQ__ConfigurationFieldSet__c,
+    "SBQQ__ConfigurationFields__c": record.SBQQ__ConfigurationFields__c,
+    "SBQQ__ConfigurationFormTitle__c": record.SBQQ__ConfigurationFormTitle__c,
+    "SBQQ__ConfigurationType__c": record.SBQQ__ConfigurationType__c,
+    "SBQQ__ConfigurationValidator__c": record.SBQQ__ConfigurationValidator__c,
+    "SBQQ__ConfiguredCodePattern__c": record.SBQQ__ConfiguredCodePattern__c,
+    "SBQQ__ConfiguredDescriptionPattern__c": record.SBQQ__ConfiguredDescriptionPattern__c,
+    "SBQQ__CostEditable__c": record.SBQQ__CostEditable__c,
+    "SBQQ__CostSchedule__c": record.SBQQ__CostSchedule__c,
+    "SBQQ__CustomConfigurationPage__c": record.SBQQ__CustomConfigurationPage__c,
+    "SBQQ__CustomConfigurationRequired__c": record.SBQQ__CustomConfigurationRequired__c,
+    "SBQQ__CustomerCommunityAvailability__c": record.SBQQ__CustomerCommunityAvailability__c,
+    "SBQQ__DefaultPricingTable__c": record.SBQQ__DefaultPricingTable__c,
+    "SBQQ__DefaultQuantity__c": record.SBQQ__DefaultQuantity__c,
+    "SBQQ__DescriptionLocked__c": record.SBQQ__DescriptionLocked__c,
+    "SBQQ__DiscountCategory__c": record.SBQQ__DiscountCategory__c,
+    "SBQQ__DiscountSchedule__c": record.SBQQ__DiscountSchedule__c,
+    "SBQQ__DynamicPricingConstraint__c": record.SBQQ__DynamicPricingConstraint__c,
+    "SBQQ__EnableLargeConfiguration__c": record.SBQQ__EnableLargeConfiguration__c,
+    "SBQQ__ExcludeFromMaintenance__c": record.SBQQ__ExcludeFromMaintenance__c,
+    "SBQQ__ExcludeFromOpportunity__c": record.SBQQ__ExcludeFromOpportunity__c,
+    "SBQQ__ExternallyConfigurable__c": record.SBQQ__ExternallyConfigurable__c,
+    "SBQQ__GenerateContractedPrice__c": record.SBQQ__GenerateContractedPrice__c,
+    "SBQQ__HasConfigurationAttributes__c": record.SBQQ__HasConfigurationAttributes__c,
+    "SBQQ__HasConsumptionSchedule__c": record.SBQQ__HasConsumptionSchedule__c,
+    "SBQQ__Hidden__c": record.SBQQ__Hidden__c,
+    "SBQQ__HidePriceInSearchResults__c": record.SBQQ__HidePriceInSearchResults__c,
+    "SBQQ__IncludeInMaintenance__c": record.SBQQ__IncludeInMaintenance__c,
+    "SBQQ__NewQuoteGroup__c": record.SBQQ__NewQuoteGroup__c,
+    "SBQQ__NonDiscountable__c": record.SBQQ__NonDiscountable__c,
+    "SBQQ__NonPartnerDiscountable__c": record.SBQQ__NonPartnerDiscountable__c,
+    "SBQQ__OptionLayout__c": record.SBQQ__OptionLayout__c,
+    "SBQQ__OptionSelectionMethod__c": record.SBQQ__OptionSelectionMethod__c,
+    "SBQQ__Optional__c": record.SBQQ__Optional__c,
+    "SBQQ__PriceEditable__c": record.SBQQ__PriceEditable__c,
+    "SBQQ__PricingGuidance__c": record.SBQQ__PricingGuidance__c,
+    "SBQQ__PricingMethodEditable__c": record.SBQQ__PricingMethodEditable__c,
+    "SBQQ__PricingMethod__c": record.SBQQ__PricingMethod__c,
+    "SBQQ__ProductPictureID__c": record.SBQQ__ProductPictureID__c,
+    "SBQQ__QuantityEditable__c": record.SBQQ__QuantityEditable__c,
+    "SBQQ__QuantityScale__c": record.SBQQ__QuantityScale__c,
+    "SBQQ__ReconfigurationDisabled__c": record.SBQQ__ReconfigurationDisabled__c,
+    "SBQQ__RenewalProduct__c": record.SBQQ__RenewalProduct__c,
+    "SBQQ__SortOrder__c": record.SBQQ__SortOrder__c,
+    "SBQQ__Specifications__c": record.SBQQ__Specifications__c,
+    "SBQQ__SubscriptionBase__c": record.SBQQ__SubscriptionBase__c,
+    "SBQQ__SubscriptionCategory__c": record.SBQQ__SubscriptionCategory__c,
+    "SBQQ__SubscriptionPercent__c": record.SBQQ__SubscriptionPercent__c,
+    "SBQQ__SubscriptionPricing__c": record.SBQQ__SubscriptionPricing__c,
+    "SBQQ__SubscriptionTarget__c": record.SBQQ__SubscriptionTarget__c,
+    "SBQQ__SubscriptionTerm__c": record.SBQQ__SubscriptionTerm__c,
+    "SBQQ__SubscriptionType__c": record.SBQQ__SubscriptionType__c,
+    "SBQQ__TaxCode__c": record.SBQQ__TaxCode__c,
+    "SBQQ__Taxable__c": record.SBQQ__Taxable__c,
+    "SBQQ__TermDiscountLevel__c": record.SBQQ__TermDiscountLevel__c,
+    "SBQQ__TermDiscountSchedule__c": record.SBQQ__TermDiscountSchedule__c,
+    "SBQQ__UpgradeCredit__c": record.SBQQ__UpgradeCredit__c,
+    "SBQQ__UpgradeRatio__c": record.SBQQ__UpgradeRatio__c,
+    "SBQQ__UpgradeSource__c": record.SBQQ__UpgradeSource__c,
+    "SBQQ__UpgradeTarget__c": record.SBQQ__UpgradeTarget__c,
+    "SBQQ__ConfigurationEvent__c": record.SBQQ__ConfigurationEvent__c,
+    "AVA_SFCPQ__TaxCode__c": record.AVA_SFCPQ__TaxCode__c,
+    "Attendance_Sensitivity_Threshold__c": record.Attendance_Sensitivity_Threshold__c,
+    "Audience__c": record.Audience__c,
+    "Business_Segment__c": record.Business_Segment__c,
+    "Configuration_Attributes_Allowed__c": record.Configuration_Attributes_Allowed__c,
+    "DisableProration__c": record.DisableProration__c,
+    "Grade_Filter__c": record.Grade_Filter__c,
+    "Is_Consumable_Kit__c": record.Is_Consumable_Kit__c,
+    "Is_Email_Sent__c": record.Is_Email_Sent__c,
+    "Item_Type__c": record.Item_Type__c,
+    "Location_Filter__c": record.Location_Filter__c,
+    "Maximum_Attendance_Allowed_per_Unit__c": record.Maximum_Attendance_Allowed_per_Unit__c,
+    "Medium__c": record.Medium__c,
+    "PD_Applicable_Product_Family__c": record.PD_Applicable_Product_Family__c,
+    "PD_Provider__c": record.PD_Provider__c,
+    "Package_Tier__c": record.Package_Tier__c,
+    "Product_Type__c": record.Product_Type__c,
+    "Status__c": record.Status__c,
+    "Subsidiary_Avatax__c": record.Subsidiary_Avatax__c,
+    "Subsidiary__c": record.Subsidiary__c,
+    "Configuration_Attributes_Allowed_Formula__c": record.Configuration_Attributes_Allowed_Formula__c,
+    "Sales_Availability__c": record.Sales_Availability__c,
+    "Status_Value_Legacy__c": record.Status_Value_Legacy__c,
+    "Status_Value__c": record.Status_Value__c,
+    "Receives_Markup__c": record.Receives_Markup__c,
+    "NetSuite_CPQ_ID__c": record.NetSuite_CPQ_ID__c,
+    "UPC_Code__c": record.UPC_Code__c,
+    "Acquisition_Company__c": record.Acquisition_Company__c,
+    "Provisioning_Platform__c": record.Provisioning_Platform__c,
+    "Product_Family__c": record.Product_Family__c,
+    "Digital_Record_Type_Check__c": record.Digital_Record_Type_Check__c,
+    "Product_RecordType_Name__c": record.Product_RecordType_Name__c,  
+    "LastViewedDate": record.LastViewedDate,
+    "LastReferencedDate": record.LastReferencedDate,
+    "End_of_Life_Date__c": record.End_of_Life_Date__c,
+    "End_of_Sale_Date__c": record.End_of_Sale_Date__c,
+    "Summer_School__c": record.Summer_School__c,
+    "Special_SS_Renewal__c": record.Special_SS_Renewal__c,
+    "Go_Live_Date__c": record.Go_Live_Date__c
+}
+]]></ee:set-payload>
+					
+</ee:message>
+				</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="e6cb857f-dc44-43f1-b26b-950fd539a992" name="insert-to-database-subFlow" />
+				<logger level="INFO" doc:name="Logger" doc:id="beeea737-9db0-4eb9-a3cf-7930e4fbad32" message="Completed Product Load" />
+			
+	</sub-flow>
+	<sub-flow name="productOption-load-to-database-subflow" doc:id="8047554f-8f43-4c34-a778-e86c09c9254c" >
+	<logger level="INFO" doc:name="Logger" doc:id="96f188a5-495c-4bb9-ac26-34cf5b01b22d" message="Started ProductOption Load to Database"/>
+		<ee:transform doc:name="ProductOption" doc:id="bf0d44ed-5f9d-4bbd-91db-ed1995cf6f56">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, OwnerId, IsDeleted, Name, CurrencyIsoCode, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById, SystemModstamp, SBQQ__AppliedImmediatelyContext__c, SBQQ__AppliedImmediately__c, SBQQ__Bundled__c, SBQQ__ComponentCodePosition__c, SBQQ__ComponentCode__c, SBQQ__ComponentDescriptionPosition__c, SBQQ__ComponentDescription__c, SBQQ__ConfiguredSKU__c, SBQQ__DefaultPricingTable__c, SBQQ__DiscountAmount__c, SBQQ__DiscountSchedule__c, SBQQ__Discount__c, SBQQ__DiscountedByPackage__c, SBQQ__ExistingQuantity__c, SBQQ__Feature__c, SBQQ__MaxQuantity__c, SBQQ__MinQuantity__c, SBQQ__Number__c, SBQQ__OptionalSKU__c, SBQQ__QuantityEditable__c, SBQQ__Quantity__c, SBQQ__QuoteLineVisibility__c, SBQQ__RenewalProductOption__c, SBQQ__Required__c, SBQQ__Selected__c, SBQQ__SubscriptionScope__c, SBQQ__System__c, SBQQ__Type__c, SBQQ__UnitPrice__c, SBQQ__UpliftedByPackage__c, SBQQ__PriceEditable__c, SBQQ__ProductCode__c, SBQQ__ProductConfigurationType__c, SBQQ__ProductDescription__c, SBQQ__ProductFamily__c, SBQQ__ProductName__c, SBQQ__ProductQuantityScale__c, SBQQ__ProductSubscriptionPricing__c, Configuration_Attributes_Allowed__c, Earliest_Requested_Delivery_Date__c, Expected_Number_of_Participants__c, Feature_Number__c, Grade_Filter__c, Grade__c, Item_Type__c, Language__c, Legacy_Quantity__c, Location_Filter__c, Location__c, Medium__c, PD_Applicable_Product_Family__c, PD_Provider__c, Package_Tier__c, Product_Type__c, Standards__c, Format__c, Override_Transaction_Type__c, QuoteType__c, Transaction_Type__c, Enrollment_Size__c, LMS_Account_Setup_Type__c from SBQQ__ProductOption__c"]]></ee:set-payload>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="tableName"><![CDATA["[" ++ p('db.schema') ++ "].[SF_ProductOption]"]]></ee:set-variable>
+						<ee:set-variable variableName="columns"><![CDATA[["Id","OwnerId","IsDeleted","Name","CurrencyIsoCode","CreatedById","LastModifiedById","SystemModstamp","SBQQ__AppliedImmediatelyContext__c","SBQQ__AppliedImmediately__c","SBQQ__Bundled__c","SBQQ__ComponentCodePosition__c","SBQQ__ComponentCode__c","SBQQ__ComponentDescriptionPosition__c","SBQQ__ComponentDescription__c","SBQQ__ConfiguredSKU__c","SBQQ__DefaultPricingTable__c","SBQQ__DiscountAmount__c","SBQQ__DiscountSchedule__c","SBQQ__Discount__c","SBQQ__DiscountedByPackage__c","SBQQ__ExistingQuantity__c","SBQQ__Feature__c","SBQQ__MaxQuantity__c","SBQQ__MinQuantity__c","SBQQ__Number__c","SBQQ__OptionalSKU__c","SBQQ__QuantityEditable__c","SBQQ__Quantity__c","SBQQ__QuoteLineVisibility__c","SBQQ__RenewalProductOption__c","SBQQ__Required__c","SBQQ__Selected__c","SBQQ__SubscriptionScope__c","SBQQ__System__c","SBQQ__Type__c","SBQQ__UnitPrice__c","SBQQ__UpliftedByPackage__c","SBQQ__PriceEditable__c","SBQQ__ProductCode__c","SBQQ__ProductConfigurationType__c","SBQQ__ProductDescription__c","SBQQ__ProductFamily__c","SBQQ__ProductName__c","SBQQ__ProductQuantityScale__c","SBQQ__ProductSubscriptionPricing__c","Configuration_Attributes_Allowed__c","Expected_Number_of_Participants__c","Feature_Number__c","Grade_Filter__c","Grade__c","Item_Type__c","Language__c","Legacy_Quantity__c","Location_Filter__c","Location__c","Medium__c","PD_Applicable_Product_Family__c","PD_Provider__c","Package_Tier__c","Product_Type__c","Standards__c","Format__c","Override_Transaction_Type__c","QuoteType__c","Transaction_Type__c","Enrollment_Size__c","LMS_Account_Setup_Type__c","CreatedDate","LastModifiedDate","Earliest_Requested_Delivery_Date__c"]
+//"Earliest_Requested_Delivery_Date__c",]]></ee:set-variable>
+						<ee:set-variable variableName="values"><![CDATA["(:Id,:OwnerId,:IsDeleted,:Name,:CurrencyIsoCode,:CreatedById,:LastModifiedById,:SystemModstamp,:SBQQ__AppliedImmediatelyContext__c,:SBQQ__AppliedImmediately__c,:SBQQ__Bundled__c,:SBQQ__ComponentCodePosition__c,:SBQQ__ComponentCode__c,:SBQQ__ComponentDescriptionPosition__c,:SBQQ__ComponentDescription__c,:SBQQ__ConfiguredSKU__c,:SBQQ__DefaultPricingTable__c,:SBQQ__DiscountAmount__c,:SBQQ__DiscountSchedule__c,:SBQQ__Discount__c,:SBQQ__DiscountedByPackage__c,:SBQQ__ExistingQuantity__c,:SBQQ__Feature__c,:SBQQ__MaxQuantity__c,:SBQQ__MinQuantity__c,:SBQQ__Number__c,:SBQQ__OptionalSKU__c,:SBQQ__QuantityEditable__c,:SBQQ__Quantity__c,:SBQQ__QuoteLineVisibility__c,:SBQQ__RenewalProductOption__c,:SBQQ__Required__c,:SBQQ__Selected__c,:SBQQ__SubscriptionScope__c,:SBQQ__System__c,:SBQQ__Type__c,:SBQQ__UnitPrice__c,:SBQQ__UpliftedByPackage__c,:SBQQ__PriceEditable__c,:SBQQ__ProductCode__c,:SBQQ__ProductConfigurationType__c,:SBQQ__ProductDescription__c,:SBQQ__ProductFamily__c,:SBQQ__ProductName__c,:SBQQ__ProductQuantityScale__c,:SBQQ__ProductSubscriptionPricing__c,:Configuration_Attributes_Allowed__c,:Expected_Number_of_Participants__c,:Feature_Number__c,:Grade_Filter__c,:Grade__c,:Item_Type__c,:Language__c,:Legacy_Quantity__c,:Location_Filter__c,:Location__c,:Medium__c,:PD_Applicable_Product_Family__c,:PD_Provider__c,:Package_Tier__c,:Product_Type__c,:Standards__c,:Format__c,:Override_Transaction_Type__c,:QuoteType__c,:Transaction_Type__c,:Enrollment_Size__c,:LMS_Account_Setup_Type__c,:CreatedDate,:LastModifiedDate,:Earliest_Requested_Delivery_Date__c)"
+//"Earliest_Requested_Delivery_Date__c",]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="f62d79d5-e78a-479e-9c6d-c64b157d6d90" name="query-in-salesforce-subFlow" />
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="69dc852a-695f-4a09-901e-fbbed230534a" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="d6f5f983-a7db-4589-adfb-39a288afbb18">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id": record.Id,
+"OwnerId": record.OwnerId,
+"IsDeleted":record.IsDeleted,
+"Name": record.Name,
+"CurrencyIsoCode": record.CurrencyIsoCode,
+"CreatedDate": record.CreatedDate,
+"CreatedById": record.CreatedById,
+"LastModifiedDate": record.LastModifiedDate,
+"LastModifiedById": record.LastModifiedById,
+"SystemModstamp": record.SystemModstamp,
+"SBQQ__AppliedImmediatelyContext__c": record.SBQQ__AppliedImmediatelyContext__c,
+"SBQQ__AppliedImmediately__c": record.SBQQ__AppliedImmediately__c,
+"SBQQ__Bundled__c":record.SBQQ__Bundled__c,
+"SBQQ__ComponentCodePosition__c": record.SBQQ__ComponentCodePosition__c,
+"SBQQ__ComponentCode__c": record.SBQQ__ComponentCode__c,
+"SBQQ__ComponentDescriptionPosition__c": record.SBQQ__ComponentDescriptionPosition__c,
+"SBQQ__ComponentDescription__c":record.SBQQ__ComponentDescription__c,
+"SBQQ__ConfiguredSKU__c": record.SBQQ__ConfiguredSKU__c,
+"SBQQ__DefaultPricingTable__c": record.SBQQ__DefaultPricingTable__c,
+"SBQQ__DiscountAmount__c": record.SBQQ__DiscountAmount__c,
+"SBQQ__DiscountSchedule__c": record.SBQQ__DiscountSchedule__c,
+"SBQQ__Discount__c": record.SBQQ__Discount__c,
+"SBQQ__DiscountedByPackage__c": record.SBQQ__DiscountedByPackage__c,
+"SBQQ__ExistingQuantity__c": record.SBQQ__ExistingQuantity__c,
+"SBQQ__Feature__c": record.SBQQ__Feature__c,
+"SBQQ__MaxQuantity__c": record.SBQQ__MaxQuantity__c,
+"SBQQ__MinQuantity__c":record.SBQQ__MinQuantity__c,
+"SBQQ__Number__c": record.SBQQ__Number__c,
+"SBQQ__OptionalSKU__c": record.SBQQ__OptionalSKU__c,
+"SBQQ__QuantityEditable__c": record.SBQQ__QuantityEditable__c,
+"SBQQ__Quantity__c": record.SBQQ__Quantity__c,
+"SBQQ__QuoteLineVisibility__c": record.SBQQ__QuoteLineVisibility__c,
+"SBQQ__RenewalProductOption__c": record.SBQQ__RenewalProductOption__c,
+"SBQQ__Required__c": record.SBQQ__Required__c,
+"SBQQ__Selected__c": record.SBQQ__Selected__c,
+"SBQQ__SubscriptionScope__c": record.SBQQ__SubscriptionScope__c,
+"SBQQ__System__c":record.SBQQ__System__c,
+"SBQQ__Type__c": record.SBQQ__Type__c,
+"SBQQ__UnitPrice__c": record.SBQQ__UnitPrice__c,
+"SBQQ__UpliftedByPackage__c": record.SBQQ__UpliftedByPackage__c,
+"SBQQ__PriceEditable__c": record.SBQQ__PriceEditable__c,
+"SBQQ__ProductCode__c": record.SBQQ__ProductCode__c,
+"SBQQ__ProductConfigurationType__c": record.SBQQ__ProductConfigurationType__c,
+"SBQQ__ProductDescription__c": record.SBQQ__ProductDescription__c,
+"SBQQ__ProductFamily__c": record.SBQQ__ProductFamily__c,
+"SBQQ__ProductName__c": record.SBQQ__ProductName__c,
+"SBQQ__ProductQuantityScale__c":record.SBQQ__ProductQuantityScale__c,
+"SBQQ__ProductQuantityScale__c": record.SBQQ__ProductQuantityScale__c,
+"SBQQ__ProductSubscriptionPricing__c": record.SBQQ__ProductSubscriptionPricing__c,
+"Configuration_Attributes_Allowed__c": record.Configuration_Attributes_Allowed__c,
+"Expected_Number_of_Participants__c": record.Expected_Number_of_Participants__c,
+"Feature_Number__c": record.Feature_Number__c,
+"Grade_Filter__c": record.Grade_Filter__c,
+"Grade__c": record.Grade__c,
+"Item_Type__c": record.Item_Type__c,
+"Language__c": record.Language__c,
+"Legacy_Quantity__c": record.Legacy_Quantity__c,
+"Location_Filter__c": record.Location_Filter__c,
+"Location__c": record.Location__c,
+"Medium__c": record.Medium__c,
+"PD_Applicable_Product_Family__c": record.PD_Applicable_Product_Family__c,
+"PD_Provider__c": record.PD_Provider__c,
+"Package_Tier__c": record.Location__c,
+"Product_Type__c": record.Product_Type__c,
+"Standards__c": record.Standards__c,
+"Format__c": record.Format__c,
+"Override_Transaction_Type__c": record.Override_Transaction_Type__c,
+"QuoteType__c": record.QuoteType__c,
+"Transaction_Type__c": record.Transaction_Type__c,
+Enrollment_Size__c: record.Enrollment_Size__c,
+"LMS_Account_Setup_Type__c":record.LMS_Account_Setup_Type__c,
+"Earliest_Requested_Delivery_Date__c":record.Earliest_Requested_Delivery_Date__c
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="eff94c78-2650-48d3-aa26-8cf10d4bd6b5" name="insert-to-database-subFlow" />
+		<logger level="INFO" doc:name="Logger" doc:id="334daf7d-4e90-4dfa-a1c0-6034ea06dfee" message="Completed ProductOption Load"/>
+	
+</sub-flow>
+<sub-flow name="productfeature-load-to-database-subflow" doc:id="4a758628-3600-4b66-941b-e55516d05b6b">
+	<logger level="INFO" doc:name="Logger" doc:id="b1757d69-1e6c-4484-acfe-8f47099d9227" message="Started ProductFeature Load to Database"/>
+		<ee:transform doc:name="ProductFeature" doc:id="2369ef59-751d-48db-b4c6-a2ced510e913">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, OwnerId, IsDeleted, Name, CurrencyIsoCode, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById, SystemModstamp, SBQQ__Category__c, SBQQ__ConfigurationFieldSet__c, SBQQ__ConfiguredSKU__c, SBQQ__DiscountSchedule__c, SBQQ__DynamicProductFilterFieldSet__c, SBQQ__DynamicProductLookupFieldSet__c, SBQQ__MaxOptionCount__c, SBQQ__MinOptionCount__c, SBQQ__Number__c, SBQQ__OptionSelectionMethod__c, AdditionalInstructions__c from SBQQ__ProductFeature__c"]]></ee:set-payload>
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="columns" ><![CDATA[["Id","OwnerId","IsDeleted","Name","CurrencyIsoCode","CreatedById","LastModifiedById","SystemModstamp","SBQQ__Category__c","SBQQ__ConfigurationFieldSet__c","SBQQ__ConfiguredSKU__c","SBQQ__DiscountSchedule__c","SBQQ__DynamicProductFilterFieldSet__c","SBQQ__DynamicProductLookupFieldSet__c","SBQQ__MaxOptionCount__c","SBQQ__MinOptionCount__c","SBQQ__Number__c","SBQQ__OptionSelectionMethod__c","AdditionalInstructions__c", "CreatedDate","LastModifiedDate"]]]></ee:set-variable>
+						<ee:set-variable variableName="tableName" ><![CDATA["[" ++ p('db.schema') ++ "].[SF_ProductFeature]"]]></ee:set-variable>
+						<ee:set-variable variableName="values" ><![CDATA["(:Id, :OwnerId, :IsDeleted, :Name, :CurrencyIsoCode, :CreatedById, :LastModifiedById, :SystemModstamp, :SBQQ__Category__c, :SBQQ__ConfigurationFieldSet__c, :SBQQ__ConfiguredSKU__c, :SBQQ__DiscountSchedule__c, :SBQQ__DynamicProductFilterFieldSet__c, :SBQQ__DynamicProductLookupFieldSet__c, :SBQQ__MaxOptionCount__c, :SBQQ__MinOptionCount__c, :SBQQ__Number__c, :SBQQ__OptionSelectionMethod__c, :AdditionalInstructions__c, :CreatedDate,:LastModifiedDate)"]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="0b53b195-740f-4e0e-9ce2-1bb87b9efa3e" name="query-in-salesforce-subFlow"/>
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="696fc18a-d3bf-49b3-8428-385bc5319aa8" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="c26d5477-03d1-4046-b4ab-81c28c81cc31">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id": record.Id,
+"OwnerId": record.OwnerId,
+"IsDeleted":record.IsDeleted,
+"Name": record.Name,
+"CurrencyIsoCode": record.CurrencyIsoCode,
+"CreatedDate": record.CreatedDate,
+"CreatedById": record.CreatedById,
+"LastModifiedDate": record.LastModifiedDate,
+"LastModifiedById": record.LastModifiedById,
+"SystemModstamp": record.SystemModstamp,
+"SBQQ__Category__c":record.SBQQ__Category__c,
+"SBQQ__ConfigurationFieldSet__c": record.SBQQ__ConfigurationFieldSet__c,
+"SBQQ__ConfiguredSKU__c": record.SBQQ__ConfiguredSKU__c,
+"SBQQ__DiscountSchedule__c": record.SBQQ__DiscountSchedule__c,
+"SBQQ__DynamicProductFilterFieldSet__c": record.SBQQ__DynamicProductFilterFieldSet__c,
+"SBQQ__DynamicProductLookupFieldSet__c": record.SBQQ__DynamicProductLookupFieldSet__c,
+"SBQQ__MaxOptionCount__c": record.SBQQ__MaxOptionCount__c,
+"SBQQ__MinOptionCount__c": record.SBQQ__MinOptionCount__c,
+"SBQQ__Number__c": record.SBQQ__Number__c,
+"SBQQ__OptionSelectionMethod__c": record.SBQQ__OptionSelectionMethod__c,
+"AdditionalInstructions__c": record.AdditionalInstructions__c
+}
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="36b496b7-6964-4af9-b578-aed704712f56" name="insert-to-database-subFlow" />
+				<logger level="INFO" doc:name="Logger" doc:id="862ddc4f-22df-443a-aad8-ee7f8f37f7d5" message="Completed ProductFeature Load" />
+			
+	</sub-flow>
+	<sub-flow name="configurationattribute-load-to-database-subflow" doc:id="b0185690-06bc-4323-b762-37a52f3013ac" >
+		<logger level="INFO" doc:name="Logger" doc:id="2961d94a-2a4b-47ca-b164-39a02642b676" message="Started ConfigurationAttribute Load to Database"/>
+		<ee:transform doc:name="ConfigurationAttribute" doc:id="98cdf23d-5920-414e-8161-61ddf6501367" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, SBQQ__Product__c, SBQQ__TargetField__c,name,sbqq__shownvalues__c from SBQQ__ConfigurationAttribute__c"]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="columns" ><![CDATA[["Id", "SBQQ__Product__c", "SBQQ__TargetField__c","name","sbqq__shownvalues__c"]]]></ee:set-variable>
+				<ee:set-variable variableName="tableName" ><![CDATA["[" ++ p('db.schema') ++ "].[SF_SBQQ__ConfigurationAttribute__c]"]]></ee:set-variable>
+				<ee:set-variable variableName="values" ><![CDATA["(:Id,:SBQQ__Product__c,:SBQQ__TargetField__c,:name,:sbqq__shownvalues__c)"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="99e8c181-0313-48f6-9e56-e69daaaba921" name="query-in-salesforce-subFlow"/>
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="7abdee3c-af79-4229-be29-1e9985fc5aa2" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="2cf1e159-dbae-4a17-880e-86dab5b9a9a7">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id": record.Id,
+"SBQQ__Product__c": record.SBQQ__Product__c,
+"SBQQ__TargetField__c": record.SBQQ__TargetField__c,
+"name": record.name,
+"sbqq__shownvalues__c": record.sbqq__shownvalues__c
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="d8b1a6f8-fc85-41e9-9f90-6896f5cafc17" name="insert-to-database-subFlow" />
+		<logger level="INFO" doc:name="Logger" doc:id="68ef6ad1-fd46-4db6-b401-0a7093901289" message="Completed ConfigurationAttribute Load"/>
+	</sub-flow>
+	
+</mule>

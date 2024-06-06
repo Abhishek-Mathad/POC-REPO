@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_6717f294_3c7d_4367_92bf_e3074b6bdfc7_Output_Variables_truncateQuery = Any
+

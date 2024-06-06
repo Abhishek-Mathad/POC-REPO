@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	
+		<sub-flow name="truncate-table-in-database-subFlow" doc:id="6717f294-3c7d-4367-92bf-e3074b6bdfc7" >
+		<logger level="INFO" doc:name="Logger" doc:id="17f11a2a-87f0-4c69-b0b5-fb6dff6f4337" message="Before Truncating table #[vars.tableName]" />
+		<ee:transform doc:name="Transform Message" doc:id="3eb0469e-c819-42d2-a068-8efaa2a98b12" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="truncateQuery" ><![CDATA[%dw 2.0
+output application/java
+---
+"DELETE FROM " ++ vars.tableName
+]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<db:delete doc:name="Delete" doc:id="147ba49c-1b8c-4ffa-bd18-04bbf05e8ebf" config-ref="databaseConfig" target="vars.truncatedRecords">
+			<db:sql ><![CDATA[#[vars.truncateQuery]]]></db:sql>
+		</db:delete>
+		<logger level="INFO" doc:name="Logger" doc:id="a6bfc398-b439-4af2-9adf-3fd8dc0f985a" message="After Truncating table #[vars.tableName]"/>
+	</sub-flow>
+	<sub-flow name="insert-to-database-subFlow" doc:id="d82c8af3-4774-4ab2-80e1-ec4d696c6547" >
+		<ee:transform doc:name="Transform Message" doc:id="18ca1ee6-3e3f-4afb-9907-27b163cba064" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="insertQuery" ><![CDATA[%dw 2.0
+output application/java
+var insertQuery = "INSERT INTO " ++ vars.tableName ++ " (" ++ (vars.columns joinBy ", ") ++ ") VALUES "
+var fullInsertQuery = insertQuery ++ (vars.values)
+---
+fullInsertQuery
+]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="f76d79b6-0a6c-4d38-9436-f84d1868c418" message="Before database call for insert to #[vars.tableName]" />
+		<db:bulk-insert doc:name="Bulk insert" doc:id="fbd0336b-ac29-43ed-8b10-4e5a30f034bd" config-ref="databaseConfig">
+			<db:sql><![CDATA[#[vars.insertQuery]]]></db:sql>
+		</db:bulk-insert>
+		<logger level="INFO" doc:name="Logger" doc:id="e139bb2d-f9b6-442e-a35a-09c682a4182e" message="After Insert to Database for #[vars.tableName]" />
+	</sub-flow>
+	<sub-flow name="query-in-salesforce-subFlow" doc:id="c4607408-778d-48d2-b095-1cc868148867" >
+		<logger level="INFO" doc:name="Logger" doc:id="8dceda97-e930-4bc8-9304-ee592fe67e9a" message="Before query on saleforce for: #[vars.tableName]"/>
+		<salesforce:query doc:name="Query" doc:id="dd9442f2-54df-4b63-b472-5518f91ebd31" config-ref="salesforceConfig">
+			<salesforce:salesforce-query><![CDATA[#[payload]]]></salesforce:salesforce-query>
+		</salesforce:query>
+		<logger level="INFO" doc:name="Logger" doc:id="52641766-4f27-4263-a9ab-1241ccc80620" message="After query on saleforce for: #[vars.tableName]"/>
+	</sub-flow>
+	<sub-flow name="query-in-prod-salesforce-subFlow" doc:id="b466b7f6-0719-4af7-83fb-a9a553a74639" >
+		<logger level="INFO" doc:name="Logger" doc:id="3103f5c5-a788-4246-a4ff-767185383a4a" message="Before query on PROD saleforce for: #[vars.tableName]"/>
+		<salesforce:query doc:name="Query" doc:id="359a1522-755b-4dc9-af67-e44e80fc42f0" config-ref="salesforceConfigProd">
+			<salesforce:salesforce-query ><![CDATA[#[payload]]]></salesforce:salesforce-query>
+		</salesforce:query>
+		<logger level="INFO" doc:name="Logger" doc:id="d210dbf5-242f-45f8-8ee7-25c00060c101" message="After query on PROD saleforce for: #[vars.tableName]"/>
+	</sub-flow>
+</mule>

@@ -1,0 +1,12 @@
+%dw 2.0
+
+type auto_424131e2_dc82_482d_8b8a_cfcc0a2ab0cd_Output_Variables_rootMessage = {|
+  payload: Array<{ _?: java_lang_Object }>, 
+  attributes: Null
+|} {"typeId": "org.mule.runtime.api.message.Message"}
+type java_lang_Object = {|  |} {"typeAlias": "Object",
+"class": "java.lang.Object",
+"typeId": "java.lang.Object"}
+
+
+

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<flow name="recordType-loadtodb" doc:id="c34902ea-0716-4e2c-bafe-6a8bd4ad4a0c" >
+		<scheduler doc:name="Scheduler" doc:id="4916a180-0f58-4566-b32d-6a930e660871" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="2326adf9-c8ea-48c5-8cd0-b0b76a8ee174" message="Started RecordType Load flow"/>
+		<flow-ref doc:name="recordType-load-to-database-subflow" doc:id="bd8d5395-dd73-4f23-890b-84f175acbc2c" name="recordType-load-to-database-subflow" />
+		<logger level="INFO" doc:name="Logger" doc:id="0637e114-e0c7-41ee-95c2-6d47b97d0cc3" message="Completed RecordType Load flow"/>
+	</flow>
+	<flow name="discountTier-loadtodb" doc:id="ac8e783c-f480-4455-9cf2-409d632dd9af" >
+		<scheduler doc:name="Scheduler" doc:id="f6f7b57c-aea3-476f-bf46-ce080d52ec0e" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="bb7df2b5-0f92-4d72-aa04-d1292ba28226" message="Started DiscountTier Load flow"/>
+		<flow-ref doc:name="discountTier-load-to-database-subflow" doc:id="a57989e7-d0db-4bed-84aa-45bef199c16f" name="discountTier-load-to-database-subflow" />
+		<logger level="INFO" doc:name="Logger" doc:id="48fa2d5b-cf8f-4970-8a3a-d036f0fc56ad" message="Completed DiscountTier Load flow"/>
+	</flow>
+	<flow name="discountSchedule-loadtodb" doc:id="0eedf3ca-8cdc-4a6b-bfc4-75471c63fe91" >
+		<scheduler doc:name="Scheduler" doc:id="63ebcd20-c33e-435b-b01c-448884a55e33" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="9dc9c907-6585-4eb0-b306-93812a46d005" message="Started DiscountSchedule Load flow"/>
+		<flow-ref doc:name="discountSchedule-load-to-database-subflow" doc:id="220f7ccb-e029-4a02-aec5-581606ebacda" name="discountSchedule-load-to-database-subflow" />
+		<logger level="INFO" doc:name="Logger" doc:id="1c2a051f-5ebe-4608-ad7f-5042002160b9" message="Completed DiscountSchedule Load flow"/>
+	</flow>
+	<sub-flow name="recordType-load-to-database-subflow" doc:id="79843816-c0e1-43e7-8735-a6a3a9545c2c" >
+		<logger level="INFO" doc:name="Logger" doc:id="ba9fd090-3aca-47a2-9b52-c042e8be94c8" message="Started RecordType Load to Database"/>
+		<ee:transform doc:name="RecordType" doc:id="04672340-c59d-4d99-9232-7257bc4f6762">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, Name,NamespacePrefix, Description,BusinessProcessId, SobjectType, IsActive, CreatedById, CreatedDate, LastModifiedById, LastModifiedDate, SystemModstamp from RecordType"]]></ee:set-payload>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="columns"><![CDATA[["Id","Name","NamespacePrefix","Description","BusinessProcessId", "SobjectType", "IsActive", "CreatedById", "CreatedDate", "LastModifiedById", "LastModifiedDate", "SystemModstamp"]]]></ee:set-variable>
+						<ee:set-variable variableName="tableName"><![CDATA["[" ++ p('db.schema') ++ "].[SF_RecordType]"]]></ee:set-variable>
+						<ee:set-variable variableName="values"><![CDATA["(:Id,:Name,:NamespacePrefix,:Description,:BusinessProcessId,:SobjectType,:IsActive,:CreatedById,:CreatedDate,:LastModifiedById,:LastModifiedDate,:SystemModstamp)"]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="49cfab57-a7ab-4098-b508-cdc6aa560c53" name="query-in-salesforce-subFlow" />
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="5ac22dca-27d9-4c5a-860d-dc8451ca5043" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="16fd7173-b4a0-4b09-8e43-6ea43e5437f1">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id": record.Id,
+"Name": record.Name,
+"NamespacePrefix": record.NamespacePrefix,
+"Description":record.Description,
+"BusinessProcessId": record.BusinessProcessId,
+"SobjectType": record.SobjectType,
+"IsActive": record.IsActive,
+"CreatedById": record.CreatedById,
+"CreatedDate": record.CreatedDate,
+"LastModifiedById": record.LastModifiedById,
+"LastModifiedDate": record.LastModifiedDate,
+"SystemModstamp": record.SystemModstamp
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="f1ec8427-c680-4a22-b6e8-ce05a091d624" name="insert-to-database-subFlow" />
+		<logger level="INFO" doc:name="Logger" doc:id="1e0b325d-53d2-4643-a9f8-424c2c81d99c" message="Completed RecordType Load" />
+	</sub-flow>
+	<sub-flow name="discountTier-load-to-database-subflow" doc:id="5fbf05e0-9b7c-4a1e-904f-d67916ba367b" >
+		<logger level="INFO" doc:name="Logger" doc:id="79d5ecde-cd8e-45a1-9d45-293c32042f6f" message="Started DiscountTier Load to Database"/>
+		<ee:transform doc:name="DiscountTier" doc:id="b8a1046c-878f-4d82-8474-32f1c4983d5f">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, IsDeleted, Name, CurrencyIsoCode, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById, SystemModstamp, SBQQ__Schedule__c, SBQQ__DiscountAmount__c, SBQQ__Discount__c, SBQQ__LowerBound__c, SBQQ__Number__c, SBQQ__Price__c, SBQQ__UpperBound__c from SBQQ__DiscountTier__c"]]></ee:set-payload>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="tableName"><![CDATA["[" ++ p('db.schema') ++ "].[SF_DiscountTier]"]]></ee:set-variable>
+						<ee:set-variable variableName="columns"><![CDATA[["Id","IsDeleted","Name","CurrencyIsoCode","CreatedById","LastModifiedById","SystemModstamp","SBQQ__Schedule__c","SBQQ__DiscountAmount__c","SBQQ__Discount__c","SBQQ__LowerBound__c","SBQQ__Number__c","SBQQ__Price__c","SBQQ__UpperBound__c","CreatedDate","LastModifiedDate"]]]></ee:set-variable>
+				<ee:set-variable variableName="values"><![CDATA["(:Id,:IsDeleted,:Name,:CurrencyIsoCode,:CreatedById,:LastModifiedById,:SystemModstamp,:SBQQ__Schedule__c,:SBQQ__DiscountAmount__c,:SBQQ__Discount__c,:SBQQ__LowerBound__c,:SBQQ__Number__c,:SBQQ__Price__c,:SBQQ__UpperBound__c,:CreatedDate,:LastModifiedDate)"]]></ee:set-variable>					
+					</ee:variables>
+				</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="b26a6498-52e2-4a45-9518-3ee9d410f3d9" name="query-in-salesforce-subFlow" />
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="8e3f1075-a156-42b2-a268-da2ef4f5d1bd" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="7f600dc5-8d48-45df-98b6-378eb89c4249">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id": record.Id,
+"IsDeleted":record.IsDeleted,
+"Name": record.Name,
+"CurrencyIsoCode": record.CurrencyIsoCode,
+"CreatedDate": record.CreatedDate,
+"CreatedById": record.CreatedById,
+"LastModifiedDate": record.LastModifiedDate,
+"LastModifiedById": record.LastModifiedById,
+"SystemModstamp": record.SystemModstamp,
+"SBQQ__Schedule__c": record.SBQQ__Schedule__c,
+"SBQQ__DiscountAmount__c": record.SBQQ__DiscountAmount__c,
+"SBQQ__Discount__c":record.SBQQ__Discount__c,
+"SBQQ__LowerBound__c": record.SBQQ__LowerBound__c,
+"SBQQ__Number__c": record.SBQQ__Number__c,
+"SBQQ__Price__c": record.SBQQ__Price__c,
+"SBQQ__UpperBound__c": record.SBQQ__UpperBound__c
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="49c82fd1-3386-41bc-a507-5d6448391730" name="insert-to-database-subFlow" />
+		<logger level="INFO" doc:name="Logger" doc:id="d98e0985-f618-4c8c-a6c8-3d8834945ddc" message="Completed DiscountTier Load" />
+	</sub-flow>
+	<sub-flow name="discountSchedule-load-to-database-subflow" doc:id="7fedd2fd-1242-440c-a1d6-96ea63f60035">
+	<logger level="INFO" doc:name="Logger" doc:id="b035e04c-252a-42b4-bbcc-c68e0ed5d86d" message="Started DiscountSchedule Load to Database"/>
+		<ee:transform doc:name="DiscountSchedule" doc:id="5193cbc7-b665-4496-a369-188f16d1deb8">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+"select Id, OwnerId, IsDeleted,Name,CurrencyIsoCode,CreatedDate,CreatedById,LastModifiedDate,LastModifiedById,SystemModstamp,LastViewedDate,LastReferencedDate,SBQQ__Account__c,SBQQ__AggregationScope__c,SBQQ__ConstraintField__c,SBQQ__CrossOrders__c,SBQQ__CrossProducts__c,SBQQ__Description__c,SBQQ__DiscountUnit__c,SBQQ__ExcludedPricebookIds__c,SBQQ__IncludeBundledProducts__c,SBQQ__OrderProduct__c,SBQQ__Order__c,SBQQ__OriginalDiscountSchedule__c,	SBQQ__OverrideBehavior__c,SBQQ__PriceScale__c,SBQQ__Pricebook__c,SBQQ__Product__c,SBQQ__QuoteLineQuantityField__c,SBQQ__QuoteLine__c,SBQQ__Quote__c,SBQQ__Type__c,SBQQ__UsePriceForAmount__c,SBQQ__UserDefined__c from SBQQ__DiscountSchedule__c"]]></ee:set-payload>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="columns"><![CDATA[["Id", "OwnerId", "IsDeleted","Name","CurrencyIsoCode","CreatedById","LastModifiedById","SystemModstamp","SBQQ__Account__c","SBQQ__AggregationScope__c","SBQQ__ConstraintField__c","SBQQ__CrossOrders__c","SBQQ__CrossProducts__c","SBQQ__Description__c","SBQQ__DiscountUnit__c","SBQQ__ExcludedPricebookIds__c","SBQQ__IncludeBundledProducts__c","SBQQ__OrderProduct__c","SBQQ__Order__c","SBQQ__OriginalDiscountSchedule__c","SBQQ__OverrideBehavior__c","SBQQ__PriceScale__c","SBQQ__Pricebook__c","SBQQ__Product__c","SBQQ__QuoteLineQuantityField__c","SBQQ__QuoteLine__c","SBQQ__Quote__c","SBQQ__Type__c","SBQQ__UsePriceForAmount__c","SBQQ__UserDefined__c","CreatedDate","LastModifiedDate","LastViewedDate","LastReferencedDate"]
+//,"LastViewedDate","LastReferencedDate"]]></ee:set-variable>
+						<ee:set-variable variableName="tableName"><![CDATA["[" ++ p('db.schema') ++ "].[SF_DiscountSchedule]"]]></ee:set-variable>
+				<ee:set-variable variableName="values"><![CDATA["(:Id,:OwnerId,:IsDeleted,:Name,:CurrencyIsoCode,:CreatedById,:LastModifiedById,:SystemModstamp,:SBQQ__Account__c,:SBQQ__AggregationScope__c,:SBQQ__ConstraintField__c,:SBQQ__CrossOrders__c,:SBQQ__CrossProducts__c,:SBQQ__Description__c,:SBQQ__DiscountUnit__c,:SBQQ__ExcludedPricebookIds__c,:SBQQ__IncludeBundledProducts__c,:SBQQ__OrderProduct__c,:SBQQ__Order__c,:SBQQ__OriginalDiscountSchedule__c,:SBQQ__OverrideBehavior__c,:SBQQ__PriceScale__c,:SBQQ__Pricebook__c,:SBQQ__Product__c,:SBQQ__QuoteLineQuantityField__c,:SBQQ__QuoteLine__c,:SBQQ__Quote__c,:SBQQ__Type__c,:SBQQ__UsePriceForAmount__c,:SBQQ__UserDefined__c,:CreatedDate,:LastModifiedDate,:LastViewedDate,:LastReferencedDate)"
+//:LastViewedDate,:LastReferencedDate,]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="3f4e074b-e301-481d-932f-9971852143ed" name="query-in-salesforce-subFlow" />
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="cbbefe2f-7287-4c4e-8220-5f9e5ea9ccfd" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="9ddaa33d-4467-4f0f-a338-7fd1b9033194">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id": record.Id,
+"OwnerId": record.OwnerId,
+"IsDeleted":record.IsDeleted,
+"Name": record.Name,
+"CurrencyIsoCode": record.CurrencyIsoCode,
+"CreatedDate": record.CreatedDate,
+"CreatedById": record.CreatedById,
+"LastModifiedDate": record.LastModifiedDate,
+"LastModifiedById": record.LastModifiedById,
+"SystemModstamp": record.SystemModstamp,
+"LastViewedDate": record.LastViewedDate,
+"LastReferencedDate": record.LastReferencedDate,
+"SBQQ__Account__c":record.SBQQ__Account__c,
+"SBQQ__AggregationScope__c": record.SBQQ__AggregationScope__c,
+"SBQQ__ConstraintField__c": record.SBQQ__ConstraintField__c,
+"SBQQ__CrossOrders__c": record.SBQQ__CrossOrders__c,
+"SBQQ__CrossProducts__c": record.SBQQ__CrossProducts__c,
+"SBQQ__Description__c": record.SBQQ__Description__c,
+"SBQQ__DiscountUnit__c": record.SBQQ__DiscountUnit__c,
+"SBQQ__ExcludedPricebookIds__c": record.SBQQ__ExcludedPricebookIds__c,
+"SBQQ__IncludeBundledProducts__c": record.SBQQ__IncludeBundledProducts__c,
+"SBQQ__OrderProduct__c": record.SBQQ__OrderProduct__c,
+"SBQQ__Order__c": record.SBQQ__Order__c,
+"SBQQ__OriginalDiscountSchedule__c":record.SBQQ__OriginalDiscountSchedule__c,
+"SBQQ__OverrideBehavior__c": record.SBQQ__OverrideBehavior__c,
+"SBQQ__PriceScale__c": record.SBQQ__PriceScale__c,
+"SBQQ__Pricebook__c": record.SBQQ__Pricebook__c,
+"SBQQ__Product__c": record.SBQQ__Product__c,
+"SBQQ__QuoteLineQuantityField__c": record.SBQQ__QuoteLineQuantityField__c,
+"SBQQ__QuoteLine__c": record.SBQQ__QuoteLine__c,
+"SBQQ__Quote__c": record.SBQQ__Quote__c,
+"SBQQ__Type__c": record.SBQQ__Type__c,
+"SBQQ__UsePriceForAmount__c": record.SBQQ__UsePriceForAmount__c,
+"SBQQ__UserDefined__c": record.SBQQ__UserDefined__c
+}
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<flow-ref doc:name="insert-to-database-subFlow" doc:id="6a2c75a6-c772-43bf-9e93-848f9ed25197" name="insert-to-database-subFlow" />
+		<logger level="INFO" doc:name="Logger" doc:id="f7ae2bc6-fbd7-4caf-9f3e-3eb2cdc7afb4" message="Completed DiscountSchedule Load" />
+				
+	</sub-flow>
+	
+	</mule>

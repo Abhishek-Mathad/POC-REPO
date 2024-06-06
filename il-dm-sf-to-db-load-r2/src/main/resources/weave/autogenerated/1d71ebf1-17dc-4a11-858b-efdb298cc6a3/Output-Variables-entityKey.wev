@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_1d71ebf1_17dc_4a11_858b_efdb298cc6a3_Output_Variables_entityKey = String
+

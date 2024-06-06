@@ -1,0 +1,104 @@
+%dw 2.0
+
+type auto_6a13a0f1_4dd0_48dd_9d70_fda84fe40dc2_Output_Payload = {|
+  "0": org_mule_runtime_api_message_Message, 
+  "1": org_mule_runtime_api_message_Message_3, 
+  "2": org_mule_runtime_api_message_Message_7, 
+  "3": org_mule_runtime_api_message_Message_11, 
+  "4": org_mule_runtime_api_message_Message_15, 
+  "5": org_mule_runtime_api_message_Message_19, 
+  "6": org_mule_runtime_api_message_Message_20, 
+  "7": org_mule_runtime_api_message_Message_24, 
+  "8": org_mule_runtime_api_message_Message_28, 
+  "9": org_mule_runtime_api_message_Message_30, 
+  "10": org_mule_runtime_api_message_Message_35, 
+  "11": org_mule_runtime_api_message_Message_39
+|}
+type org_mule_runtime_api_message_Message_11 = {|
+  payload: Array<Number>, 
+  attributes: Null
+|} {"typeId": "org.mule.runtime.api.message.Message"}
+
+
+type org_mule_runtime_api_message_Message = {|
+  payload: Array<Number>, 
+  attributes: Null
+|} {"typeId": "org.mule.runtime.api.message.Message"}
+
+
+type org_mule_runtime_api_message_Message_39 = {|
+  payload: Array<{ _?: java_lang_Object_42 }>, 
+  attributes: Null
+|} {"typeId": "org.mule.runtime.api.message.Message"}
+type java_lang_Object_42 = {|  |} {"typeAlias": "Object",
+"class": "java.lang.Object",
+"typeId": "java.lang.Object"}
+
+
+
+
+type org_mule_runtime_api_message_Message_24 = {|
+  payload: Array<Number>, 
+  attributes: Nothing
+|} {"typeId": "org.mule.runtime.api.message.Message"}
+
+
+type org_mule_runtime_api_message_Message_20 = {|
+  payload: Array<Number>, 
+  attributes: Null
+|} {"typeId": "org.mule.runtime.api.message.Message"}
+
+
+type org_mule_runtime_api_message_Message_28 = {| payload: Any |} {"typeId": "org.mule.runtime.api.message.Message"}
+
+
+type org_mule_runtime_api_message_Message_30 = {|
+  payload: Array<{ _?: java_lang_Object_33 }>, 
+  attributes: Null
+|} {"typeId": "org.mule.runtime.api.message.Message"}
+type java_lang_Object_33 = {|  |} {"typeAlias": "Object",
+"class": "java.lang.Object",
+"typeId": "java.lang.Object"}
+
+
+
+
+type org_mule_runtime_api_message_Message_35 = {|
+  payload: Array<Number>, 
+  attributes: Null
+|} {"typeId": "org.mule.runtime.api.message.Message"}
+
+
+type org_mule_runtime_api_message_Message_3 = {|
+  payload: Array<Number>, 
+  attributes: Null
+|} {"typeId": "org.mule.runtime.api.message.Message"}
+
+
+type org_mule_runtime_api_message_Message_15 = {|
+  payload: Array<{ _?: java_lang_Object }>, 
+  attributes: Null
+|} {"typeId": "org.mule.runtime.api.message.Message"}
+type java_lang_Object = {|  |} {"typeAlias": "Object",
+"class": "java.lang.Object",
+"typeId": "java.lang.Object"}
+
+
+
+
+type org_mule_runtime_api_message_Message_7 = {|
+  payload: Array<Number>, 
+  attributes: Null
+|} {"typeId": "org.mule.runtime.api.message.Message"}
+
+
+type org_mule_runtime_api_message_Message_19 = {|
+  payload: Array<anonymousType_17>, 
+  attributes: Null
+|} {"typeId": "org.mule.runtime.api.message.Message"}
+type anonymousType_17 = { _?: java_lang_Object }
+
+
+
+
+

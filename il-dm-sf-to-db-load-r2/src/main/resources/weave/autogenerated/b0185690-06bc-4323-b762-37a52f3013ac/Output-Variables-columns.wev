@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_b0185690_06bc_4323_b762_37a52f3013ac_Output_Variables_columns = Array<String>
+

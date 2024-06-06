@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_d3448b5a_3f69_4023_b70e_6e8e47899386_Input_Variables_entityKey = String
+

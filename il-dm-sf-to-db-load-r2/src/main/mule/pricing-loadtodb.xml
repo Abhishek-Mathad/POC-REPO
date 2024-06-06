@@ -1,0 +1,259 @@
+<!-- [STUDIO:"Scatter-Gather"]<?xml version="1.0" encoding="UTF-8"?> [STUDIO] -->
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	
+		<flow name="priceBook-loadtodb" doc:id="b3a855d1-b025-4a45-905f-06cdda7d5fe6" >
+		<scheduler doc:name="Scheduler" doc:id="2dc7288d-2eb6-40f9-b77d-c947740f3838" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100"/>
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="d0bf0ca1-9089-4ffe-9dc4-52ebd5c0cc7b" message="Started PriceBook Load flow"/>
+		<flow-ref doc:name="pricebook-load-to-database-subflow" doc:id="9259640a-8e28-4131-b670-396cab551376" name="pricebook-load-to-database-subflow" />
+		<logger level="INFO" doc:name="Logger" doc:id="189dee1d-7e53-45dc-922b-03a681b260bf" message="Completed PriceBook Load flow"/>
+	</flow>
+	<flow name="priceBookEntry-loadtodb" doc:id="3d570b2c-f696-4484-851a-541654110336" >
+		<scheduler doc:name="Scheduler" doc:id="dd729900-b7b8-4fda-9751-0efab80ff204" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="372c5a46-05e4-45d2-88af-e7366e0a914b" message="Started PriceBookEntry Load flow"/>
+		<flow-ref doc:name="pricebookEntry-load-to-database-subflow" doc:id="9da38f15-57ee-4c05-8b04-93078b163f02" name="pricebookEntry-load-to-database-subflow" />
+		<logger level="INFO" doc:name="Logger" doc:id="64edf549-ba47-40de-9ea5-c92ff72ccb41" message="Completed PriceBookEntry Load flow"/>
+	</flow>
+	<flow name="accountContractedPrice-loadtodb" doc:id="bfafa9a3-604d-4a20-88ff-0150c4ad057e" >
+		<scheduler doc:name="Scheduler" doc:id="8e04b31b-7183-42a9-ae48-f634dc20cc1d" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="a30603bb-0a64-4c8e-acf0-c9938a1ffa26" message="Started AccountContractedPrice Load flow"/>
+		<flow-ref doc:name="accountcontractedPrice-load-to-salesforce-subflow" doc:id="5c32e26f-f11f-4c09-9609-777e1d919fad" name="accountcontractedPrice-load-to-salesforce-subflow" />
+		<logger level="INFO" doc:name="Logger" doc:id="11c5a4fa-4dcc-42bf-a936-13a848148a17" message="Completed AccountContractedPrice Load flow"/>
+	</flow>
+	<flow name="priceNetSuiteMapping-loadtodb" doc:id="c22da4da-5911-4a18-ac73-a9cd61f6ad72" >
+		<scheduler doc:name="Scheduler" doc:id="68fd04ca-f39b-4722-aacb-cf7a0e9c7352" >
+			<scheduling-strategy >
+				<cron expression="0 0 0 31 12 ? 2100" />
+			</scheduling-strategy>
+		</scheduler>
+		<logger level="INFO" doc:name="Logger" doc:id="085533c4-fd0f-4adb-9082-42732e10d0e3" message="Started PriceAndNetSuiteMapping Load flow"/>
+		<flow-ref doc:name="price-and-netsuite-mapping-load-to-database-subflow" doc:id="df28c2e7-eaf5-494f-8cd8-f380f2252345" name="price-and-netsuite-mapping-load-to-database-subflow" />
+		<logger level="INFO" doc:name="Logger" doc:id="8d0dc437-70f9-41c9-a652-255218c7c186" message="Completed PriceAndNetSuiteMapping Load flow"/>
+	</flow>
+	<sub-flow name="price-and-netsuite-mapping-load-to-database-subflow" doc:id="16f9b3ad-d8fb-4b5b-a1dc-4442eb171515">
+	<logger level="INFO" doc:name="Logger" doc:id="e4c0920e-ddf1-4091-b855-e113b8c2bd3b" message="Started Price and Netsuite Mapping Load to Database"/>
+		<ee:transform doc:name="PriceAndNetuiteMapping" doc:id="8af3e046-806a-499f-af56-60488850eb16">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, OwnerId, IsDeleted, Name, CurrencyIsoCode, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById, SystemModstamp, LastActivityDate, LastViewedDate, LastReferencedDate, Format__c, Grade__c, Language__c, List_Price__c, Location__c, NetSuite_Code__c, Product_ID__c, Standards__c, TransactionType__c, UPC_Code__c, Concatenate_Key__c from Price_NetSuite_Mapping__c"]]></ee:set-payload>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="tableName"><![CDATA["[" ++ p('db.schema') ++ "].[SF_PriceAndNetSuiteMapping]"]]></ee:set-variable>
+						<ee:set-variable variableName="values"><![CDATA["(:Id,:OwnerId,:IsDeleted,:Name,:CurrencyIsoCode,:CreatedById,:LastModifiedById,:SystemModstamp,:Format__c,:Grade__c,:Language__c,:List_Price__c,:Location__c,:NetSuite_Code__c,:Product_ID__c,:Standards__c,:TransactionType__c,:UPC_Code__c,:Concatenate_Key__c, :CreatedDate,:LastModifiedDate,:LastActivityDate,:LastViewedDate,:LastReferencedDate)"
+//:LastActivityDate,:LastViewedDate,:LastReferencedDate,]]></ee:set-variable>
+						<ee:set-variable variableName="columns"><![CDATA[["Id","OwnerId","IsDeleted","Name","CurrencyIsoCode","CreatedById","LastModifiedById","SystemModstamp","Format__c","Grade__c","Language__c","List_Price__c","Location__c","NetSuite_Code__c","Product_ID__c","Standards__c","TransactionType__c","UPC_Code__c","Concatenate_Key__c","CreatedDate","LastModifiedDate","LastActivityDate","LastViewedDate","LastReferencedDate"]
+//"LastActivityDate","LastViewedDate","LastReferencedDate",]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="2ad718e3-64e4-44b5-8c4e-9aab839c86ec" name="query-in-salesforce-subFlow" />
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="1490dd27-b0be-49fd-9478-5477b8096aa0" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="54238227-077e-4fb6-98d8-186b5396f4e4">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id": record.Id,
+"OwnerId": record.OwnerId,
+"IsDeleted":record.IsDeleted,
+"Name": record.Name,
+"CurrencyIsoCode": record.CurrencyIsoCode,
+"CreatedDate": record.CreatedDate,
+"CreatedById": record.CreatedById,
+"LastModifiedDate": record.LastModifiedDate,
+"LastModifiedById": record.LastModifiedById,
+"SystemModstamp": record.SystemModstamp,
+"LastActivityDate":record.LastActivityDate,
+"LastViewedDate": record.LastViewedDate,
+"LastReferencedDate": record.LastReferencedDate,
+"Format__c": record.Format__c,
+"Grade__c": record.Grade__c,
+"Language__c": record.Language__c,
+"List_Price__c": record.List_Price__c,
+"Location__c": record.Location__c,
+"NetSuite_Code__c": record.NetSuite_Code__c,
+"Product_ID__c": record.Product_ID__c,
+"Standards__c": record.Standards__c,
+"TransactionType__c": record.TransactionType__c,
+"UPC_Code__c": record.UPC_Code__c,
+"Concatenate_Key__c": record.Concatenate_Key__c
+}
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="1fe8218e-30dd-49b8-a464-76659b2c5731" name="insert-to-database-subFlow" />
+				<logger level="INFO" doc:name="Logger" doc:id="c03565c5-e121-4d05-bfb9-4820799561b0" message="Completed PriceAndNetsuiteMapping Load" />
+	</sub-flow>
+	
+	<sub-flow name="accountcontractedPrice-load-to-salesforce-subflow" doc:id="bdd9c44d-68cf-4ec4-8018-7ed7bb5056fd" >
+		<logger level="INFO" doc:name="Logger" doc:id="043ebdec-9ef3-4ef1-8e88-1262abd636e4" message="Started AccountContractedPrice Load to Database"/>
+		<ee:transform doc:name="Transform Message" doc:id="d19125a3-11d0-42f4-bbce-9782c72747a8" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, OwnerId, IsDeleted, Name, CurrencyIsoCode, RecordTypeId, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById, SystemModstamp, LastViewedDate, LastReferencedDate, Account__c, Contracted_Price__c, Effective_Date__c, Expiration_Date__c, Format__c, Grade__c, Is_Duplicate__c, Language__c, Location__c, Price_Contract_Source__c, Product_ID__c, Standards__c, Concatenate_Key__c, Non_Discountable__c, Term_Discount__c, Volume_Discount__c, Co_Op__c, Region__c, Apply_Private__c from Account_Contracted_Price__c"]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="tableName" ><![CDATA["[" ++ p('db.schema') ++ "].[SF_AccountContractedPrice]"]]></ee:set-variable>
+				<ee:set-variable variableName="columns" ><![CDATA[["Id", "OwnerId", "IsDeleted", "Name", "CurrencyIsoCode", "RecordTypeId", "CreatedDate", "CreatedById", "LastModifiedDate", "LastModifiedById", "SystemModstamp", "LastViewedDate", "LastReferencedDate", "Account__c", "Contracted_Price__c", "Effective_Date__c", "Expiration_Date__c", "Format__c", "Grade__c", "Is_Duplicate__c", "Language__c", "Location__c", "Price_Contract_Source__c", "Product_ID__c", "Standards__c", "Concatenate_Key__c", "Non_Discountable__c", "Term_Discount__c", "Volume_Discount__c", "Co_Op__c", "Region__c", "Apply_Private__c"]]]></ee:set-variable>
+				<ee:set-variable variableName="values" ><![CDATA["(:Id, :OwnerId, :IsDeleted, :Name, :CurrencyIsoCode, :RecordTypeId, :CreatedDate, :CreatedById, :LastModifiedDate, :LastModifiedById, :SystemModstamp, :LastViewedDate, :LastReferencedDate, :Account__c, :Contracted_Price__c, :Effective_Date__c, :Expiration_Date__c, :Format__c, :Grade__c, :Is_Duplicate__c, :Language__c, :Location__c, :Price_Contract_Source__c, :Product_ID__c, :Standards__c, :Concatenate_Key__c, :Non_Discountable__c, :Term_Discount__c, :Volume_Discount__c, :Co_Op__c, :Region__c, :Apply_Private__c)"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="298feb8e-f9e3-4824-90f2-1ce3a6fc4817" name="query-in-salesforce-subFlow"/>
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="c74840b4-150c-4f16-b520-6b26464907bd" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="2b48f4d7-3750-4ba0-a7d5-d30eb4279c01">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id": record.Id,
+"OwnerId": record.OwnerId,
+"IsDeleted":record.IsDeleted,
+"Name": record.Name,
+"CurrencyIsoCode": record.CurrencyIsoCode,
+"RecordTypeId": record.RecordTypeId,
+"CreatedDate": record.CreatedDate,
+"CreatedById": record.CreatedById,
+"LastModifiedDate": record.LastModifiedDate,
+"LastModifiedById": record.LastModifiedById,
+"SystemModstamp": record.SystemModstamp,
+"LastViewedDate": record.LastViewedDate,
+"LastReferencedDate": record.LastReferencedDate,
+"Account__c": record.Account__c,
+"Contracted_Price__c": record.Contracted_Price__c,
+"Effective_Date__c": record.Effective_Date__c,
+"Expiration_Date__c": record.Expiration_Date__c,
+"Format__c": record.Format__c,
+"Grade__c": record.Grade__c,
+"Is_Duplicate__c": record.Is_Duplicate__c,
+"Language__c": record.Language__c,
+"Location__c": record.Location__c,
+"Price_Contract_Source__c": record.Price_Contract_Source__c,
+"Product_ID__c": record.Product_ID__c,
+"Standards__c": record.Standards__c,
+"Concatenate_Key__c": record.Concatenate_Key__c,
+"Non_Discountable__c": record.Non_Discountable__c,
+"Term_Discount__c": record.Term_Discount__c,
+"Volume_Discount__c": record.Volume_Discount__c,
+"Co_Op__c": record.Co_Op__c,
+"Region__c": record.Region__c,
+"Apply_Private__c": record.Apply_Private__c
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="21466943-1a66-4454-84fd-cdd15b96995c" name="insert-to-database-subFlow" />
+		<logger level="INFO" doc:name="Logger" doc:id="d341487f-434a-4727-bc97-a8b64711b1b1" message="Completed AccountContractedPrice Load"/>
+	</sub-flow>
+	<sub-flow name="pricebookEntry-load-to-database-subflow" doc:id="de75fa20-ddca-4073-83fb-2cc2785053ab" >
+		<logger level="INFO" doc:name="Logger" doc:id="51fe6249-b49c-4195-a9d8-2f8df930528c" message="Started PricebookEntry Load to Database"/>
+		<ee:transform doc:name="PricebookEntry" doc:id="d9366ff7-4026-458f-9b61-74c47d3d8b09">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+"select Id,Name,Pricebook2Id,Product2Id,CurrencyIsoCode,UnitPrice,IsActive,UseStandardPrice,CreatedDate,CreatedById,LastModifiedDate,LastModifiedById,SystemModstamp,ProductCode,IsDeleted,IsArchived from PricebookEntry"]]></ee:set-payload>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="tableName"><![CDATA["[" ++ p('db.schema') ++ "].[SF_PricebookEntry]"]]></ee:set-variable>
+						<ee:set-variable variableName="columns"><![CDATA[["Id","Name","Pricebook2Id","Product2Id","CurrencyIsoCode","UnitPrice","IsActive","UseStandardPrice","CreatedById","LastModifiedById","SystemModstamp","ProductCode","IsDeleted","IsArchived","CreatedDate","LastModifiedDate"]]]></ee:set-variable>
+						<ee:set-variable variableName="values"><![CDATA["(:Id,:Name,:Pricebook2Id,:Product2Id,:CurrencyIsoCode,:UnitPrice,:IsActive,:UseStandardPrice,:CreatedById,:LastModifiedById,:SystemModstamp,:ProductCode,:IsDeleted,:IsArchived,:CreatedDate,:LastModifiedDate)"]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="71849418-5d6d-4dff-9f02-18883ccc3af9" name="query-in-salesforce-subFlow" />
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="5066e9c6-9867-4660-a52e-0c91ffc6bcab" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="b4e61fbe-b704-485a-9c22-fb5f2bbe50a8">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id": record.Id,
+"Name":record.Name,
+"Pricebook2Id": record.Pricebook2Id,
+"Product2Id": record.Product2Id,
+"CurrencyIsoCode": record.CurrencyIsoCode,
+"UnitPrice":record.UnitPrice,
+"IsActive": record.IsActive,
+"UseStandardPrice": record.UseStandardPrice,
+"CreatedDate": record.CreatedDate,
+"CreatedById": record.CreatedById,
+"LastModifiedDate": record.LastModifiedDate,
+"LastModifiedById": record.LastModifiedById,
+"SystemModstamp": record.SystemModstamp,
+"ProductCode": record.ProductCode,
+"IsArchived": record.IsArchived,
+"IsDeleted":record.IsDeleted
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="fe905340-a495-4908-ba38-be46a0b67368" name="insert-to-database-subFlow" />
+		<logger level="INFO" doc:name="Logger" doc:id="1315bafb-df66-46bd-a388-7d48def04057" message="Completed PricebookEntry Load" />
+	</sub-flow>
+	<sub-flow name="pricebook-load-to-database-subflow" doc:id="0ee07fcc-42a1-4be7-ad48-be8f3ddd824c" >
+		<logger level="INFO" doc:name="Logger" doc:id="53f6df7b-25c7-4ade-a72c-59b324b4d10f" message="Started Pricebook Load to Database"/>
+		<ee:transform doc:name="Pricebook" doc:id="01fd4acd-2e32-4560-a007-6b6fdebe028f">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+"select Id, IsDeleted, Name, CurrencyIsoCode, CreatedDate, CreatedById, LastModifiedDate, LastModifiedById, SystemModstamp, LastViewedDate, LastReferencedDate, IsActive, IsArchived, Description, IsStandard from Pricebook2"]]></ee:set-payload>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="tableName"><![CDATA["[" ++ p('db.schema') ++ "].[SF_Pricebook]"]]></ee:set-variable>
+						<ee:set-variable variableName="columns"><![CDATA[["Id","IsDeleted","Name","CurrencyIsoCode","CreatedById","LastModifiedById","SystemModstamp","IsActive","IsArchived","Description","IsStandard","CreatedDate","LastModifiedDate","LastViewedDate","LastReferencedDate"]
+//"LastViewedDate","LastReferencedDate",]]></ee:set-variable>
+						<ee:set-variable variableName="values"><![CDATA["(:Id,:IsDeleted,:Name,:CurrencyIsoCode,:CreatedById,:LastModifiedById,:SystemModstamp,:IsActive,:IsArchived,:Description,:IsStandard,:CreatedDate,:LastModifiedDate,:LastViewedDate,:LastReferencedDate)"
+//:LastViewedDate,:LastReferencedDate,]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+		<flow-ref doc:name="query-in-salesforce-subFlow" doc:id="7a44a038-2259-4990-86c0-d976c36ff4f4" name="query-in-salesforce-subFlow" />
+		<flow-ref doc:name="truncate-table-in-database-subFlow" doc:id="0d9081ea-c892-4ac2-8baf-0f073d552da7" name="truncate-table-in-database-subFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="783cbfc5-6b55-444a-9282-df1284e83954">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map (record, index) -> {
+"Id": record.Id,
+"IsDeleted":record.IsDeleted,
+"Name": record.Name,
+"CurrencyIsoCode": record.CurrencyIsoCode,
+"CreatedDate": record.CreatedDate,
+"CreatedById": record.CreatedById,
+"LastModifiedDate": record.LastModifiedDate,
+"LastModifiedById": record.LastModifiedById,
+"SystemModstamp": record.SystemModstamp,
+"IsActive": record.IsActive,
+"IsArchived": record.IsArchived,
+"Description":record.Description,
+"IsStandard": record.IsStandard,
+"LastViewedDate":record.LastViewedDate,
+"LastReferencedDate": record.LastReferencedDate
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+		<flow-ref doc:name="insert-to-database-subFlow" doc:id="bf0b6362-244a-4f78-a44f-e3b6f52cc7a2" name="insert-to-database-subFlow" />
+		<logger level="INFO" doc:name="Logger" doc:id="9534fb62-2b83-417c-b563-06aaaec86e4f" message="Completed Pricebook Load" />
+	</sub-flow>
+	</mule>

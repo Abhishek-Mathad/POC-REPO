@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_53cd82e8_1ee6_4ba0_b7c2_9a7a5dd5319d_Output_Variables_columns = Array<"SBQQ__UserDefined__c">
+

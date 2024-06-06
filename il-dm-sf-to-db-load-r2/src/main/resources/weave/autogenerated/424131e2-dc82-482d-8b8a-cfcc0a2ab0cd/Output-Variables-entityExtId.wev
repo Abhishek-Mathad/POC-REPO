@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_424131e2_dc82_482d_8b8a_cfcc0a2ab0cd_Output_Variables_entityExtId = String
+

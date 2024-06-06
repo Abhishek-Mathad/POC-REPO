@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_4a758628_3600_4b66_941b_e55516d05b6b_Output_Variables_sfType = String
+

@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_ad3dee58_d8e9_465a_aa21_e54aa8e6dae7_Output_Variables_columns = Array<"Account_Legacy_ExternalId__c" | "AccountNumber" | "Id" | "Sales_Region__c">
+

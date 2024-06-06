@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<salesforce:sfdc-config name="salesforceConfig" doc:name="Salesforce Config" doc:id="2cb5d201-381c-4a22-8d5c-9779db1d40e7" >
+		<salesforce:basic-connection username="${sf.username}" password="${sf.password}" securityToken="${sf.token}" url="${sf.url}" />
+	</salesforce:sfdc-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="770fe58d-a75e-45ad-a304-a6b65b70db11" file="properties\config-${mule.env}.yaml" />
+	<global-property doc:name="Global Property" doc:id="9e4cf7d0-101d-4661-b07d-416ae8f31048" name="mule.env" value="dev" />
+	<db:config name="databaseConfig" doc:name="Database Config" doc:id="e371633b-b890-4293-98fd-184b66c1f23c" >
+		<db:mssql-connection host="${db.host}" port="${db.port}" user="${db.user}" password="${db.password}" databaseName="${db.databaseName}" />
+	</db:config>
+	<salesforce:sfdc-config name="salesforceConfigProd" doc:name="Salesforce Config" doc:id="93287609-a01e-443d-969d-7006c7f14121" >
+		<salesforce:basic-connection username="${sf_prod.username}" password="${sf_prod.password}" url="${sf_prod.url}" securityToken="${sf_prod.token}"/>
+	</salesforce:sfdc-config>
+
+</mule>

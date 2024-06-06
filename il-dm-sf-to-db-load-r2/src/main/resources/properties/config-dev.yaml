@@ -1,0 +1,27 @@
+sf:
+  username: "integrationuser.data@imaginelearning.com.migration"  
+  url: "https://test.salesforce.com/services/Soap/u/55.0"
+  token: "LBCgDGySnsURyq6najRj1tPh"
+  password: "Migration@IL2023"
+  batchSize: "5000"
+  updateBatchSize: "2000"
+  
+sf_prod:
+  username: "integrationuser.data@imaginelearning.com"  
+  url: "https://login.salesforce.com/services/Soap/u/55.0"
+  token: "OIAlXzVQGbFlzcW1djhyd4en"
+  password: "ImagineProd@2023"
+
+
+db:
+  host: "aop-crm-sqlsrv.database.windows.net"
+  port: "1433"
+  user: "vnithyashree"
+  password: "C91Cdy4hnG8tDPCi"
+  databaseName: "score-staging"
+  updateBatchSize: "2000"
+  schema: "stg"
+  atmQuery: "select distinct concat(cast(right(customermain#entityid,8) as varchar),'-',cast(salesrep#id as int)) as AccountTeamMember_Legacy_ExternalId__c from src.R2Orders"
+  insertBatchSize: "10000"
+#  old sf token: "bJbA7gAQr4JiaLiJVijfQ1VF"
+
